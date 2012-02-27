@@ -12,7 +12,6 @@ class RoundPairings {
     * This sorts the initial players by seed for the first round
     * @return a sorted list of objects that have players names
     */
-
    private ArrayList<PlayerSeed> sortByInitialSeed() {
       def sorted = new ArrayList<PlayerSeed>()
       def listOfPlayers = PlayerPool.listOfPlayers
@@ -77,7 +76,7 @@ class RoundPairings {
    }
 
    def ArrayList<PlayerPair> getRoundPairings() {
-      if (CreateTournament.round == 1) {
+      if (Tournament.round == 1) {
          return getRoundPairs(sortByInitialSeed())
       }
       else {
