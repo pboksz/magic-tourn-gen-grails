@@ -1,20 +1,20 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Phill
-  Date: 2/27/12
-  Time: 5:16 PM
+  User: phillip
+  Date: 2/28/12
+  Time: 4:55 PM
   To change this template use File | Settings | File Templates.
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-   <title>Magic Tournament Generator | Round ${roundNum}</title>
+   <title>Magic Tournament Generator | Final Results</title>
 </head>
 
 <body>
 <div class="header">
-   <h2>Round ${roundNum}</h2>
+   <h2>Final Results</h2>
 </div>
 
 <div class="main">
@@ -24,40 +24,52 @@
             <thead>
             <tr>
                <th>
+                  Place
+               </th>
+               <th>
                   Player Name
                </th>
                <th>
-                  Opponent Name
+                  Round Wins
                </th>
                <th>
-                  Player Wins
+                  Round Byes
                </th>
                <th>
-                  Player Losses
+                  Round Losses
+               </th>
+               <th>
+                  Individual Wins
+               </th>
+               <th>
+                  Individual Losses
                </th>
             </tr>
             </thead>
-            <g:each in="${roundPairs}" var="pair">
-               <g:each in="${pair.value}" var="info">
+            <g:each in="${results}" var="result">
                   <tr>
                      <td>
-                        ${info.name}
-                        <g:hiddenField name="player" value="${info.name}"/>
+                        ${result.rank}
                      </td>
                      <td>
-                        ${info.opponent}
-                        <g:hiddenField name="opponent" value="${info.opponent}"/>
+                        ${result.name}
                      </td>
                      <td>
-                        <g:textField name="wins" maxlength="1"
-                                     style="width: 20px"/>
+                        ${result.roundWins}
                      </td>
                      <td>
-                        <g:textField name="losses" maxlength="1"
-                                     style="width: 20px"/>
+                        ${result.roundByes}
+                     </td>
+                     <td>
+                        ${result.roundLosses}
+                     </td>
+                     <td>
+                        ${result.individualWins}
+                     </td>
+                     <td>
+                        ${result.individualLosses}
                      </td>
                   </tr>
-               </g:each>
             </g:each>
          </table>
       </div>

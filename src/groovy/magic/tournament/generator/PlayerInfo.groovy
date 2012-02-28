@@ -7,18 +7,32 @@ package magic.tournament.generator
  */
 class PlayerInfo {
    private String name
+   private int seed
+   private int rank = 0
    private int roundWins = 0
    private int roundLosses = 0
    private int roundByes = 0
    private int individualWins = 0
    private int individualLosses = 0
+   
+   private SortedMap<Integer, String> roundPairings = new TreeMap<Integer, String>()
+   private String opponent
 
-   def PlayerInfo(String name) {
+   def PlayerInfo(String name, int seed) {
       this.name = name
+      this.seed = seed
    }
 
    String getName() {
       return name
+   }
+
+   int getSeed() {
+      return seed
+   }
+
+   int getRank() {
+      return rank
    }
 
    int getRoundWins() {
@@ -40,6 +54,15 @@ class PlayerInfo {
    int getIndividualLosses() {
       return individualLosses
    }
+   
+   SortedMap<Integer, String> getRoundPairings() {
+      return roundPairings
+   }
+   
+   String getOpponent()
+   {
+      return opponent
+   }
 
    def void wonRound() {
       this.roundWins += 1
@@ -59,5 +82,15 @@ class PlayerInfo {
 
    def void addIndividualLosses(int losses) {
       this.individualLosses += losses
+   }
+
+   def void addRoundPairing(int round, String opponent)
+   {
+      roundPairings.put(round, opponent)
+      this.opponent = opponent
+   }
+
+   def void setRank(int rank){
+      this.rank = rank
    }
 }
