@@ -9,12 +9,13 @@ class PlayerInfo {
    private String name
    private int seed
    private int rank = 0
+   private int points = 0
    private int roundWins = 0
    private int roundLosses = 0
    private int roundByes = 0
    private int individualWins = 0
    private int individualLosses = 0
-   
+
    private SortedMap<Integer, String> roundPairings = new TreeMap<Integer, String>()
    private String opponent
 
@@ -23,44 +24,47 @@ class PlayerInfo {
       this.seed = seed
    }
 
-   String getName() {
+   def String getName() {
       return name
    }
 
-   int getSeed() {
+   def int getSeed() {
       return seed
    }
 
-   int getRank() {
+   def int getRank() {
       return rank
    }
 
-   int getRoundWins() {
+   def int getPoints() {
+      return points
+   }
+
+   def int getRoundWins() {
       return roundWins
    }
 
-   int getRoundLosses() {
+   def int getRoundLosses() {
       return roundLosses
    }
 
-   int getRoundByes() {
+   def int getRoundByes() {
       return roundByes
    }
 
-   int getIndividualWins() {
+   def int getIndividualWins() {
       return individualWins
    }
 
-   int getIndividualLosses() {
+   def int getIndividualLosses() {
       return individualLosses
    }
-   
-   SortedMap<Integer, String> getRoundPairings() {
+
+   def SortedMap<Integer, String> getRoundPairings() {
       return roundPairings
    }
-   
-   String getOpponent()
-   {
+
+   def String getOpponent() {
       return opponent
    }
 
@@ -84,13 +88,16 @@ class PlayerInfo {
       this.individualLosses += losses
    }
 
-   def void addRoundPairing(int round, String opponent)
-   {
+   def void addRoundPairing(int round, String opponent) {
       roundPairings.put(round, opponent)
       this.opponent = opponent
    }
 
-   def void setRank(int rank){
+   def void setRank(int rank) {
       this.rank = rank
+   }
+
+   def void addPoints(int howMany) {
+      this.points += howMany
    }
 }

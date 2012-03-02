@@ -11,6 +11,7 @@ class IndexController {
    def addsettings() {
       def howMany = Integer.valueOf(params.howManyPlayers)
       Tournament.setMaxRound(Integer.valueOf(params.howManyRounds))
+      Tournament.setFormat(params.whichFormat)
       render(view: "addplayers", model: [howManyPlayers: howMany])
    }
 
@@ -33,6 +34,10 @@ class IndexController {
       Tournament.registerPlayers(playerNames)
 
       //pass the round number and pairings list
+      render(view: "register", model: [players: PlayerPool.listOfPlayers])
+   }
+
+   def firstround() {
       redirect(action: "show")
    }
 

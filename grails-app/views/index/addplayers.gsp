@@ -19,7 +19,7 @@
 
 <div class="main">
     <g:form>
-        Please input each player's name (if left blank the name will be set as "playerX", respectively)
+        Please input each player's name (if left blank the name will be set as "player#")<br>
         <g:each in="${(1..howManyPlayers)}" var="num">
             Player ${num} Name: <g:textField name="${'player' + num}"/><br>
         </g:each>

@@ -19,11 +19,13 @@
 
 <div class="main">
    <g:form>
-      How Many Players?
-      <g:select name="howManyPlayers" from="${[4, 5, 6, 7, 8, 9, 10, 11, 12]}"/>
-      How Many Rounds?
-      <g:select name="howManyRounds" from="${[3, 4, 5, 6, 7, 8]}"/>
-      <g:actionSubmit value="Submit Settings" action="addsettings"/>
+      How Many Players?<br>
+      <g:select name="howManyPlayers" from="${[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}"/><br>
+      What Format?<br>
+      <g:select name="whichFormat" from="${["Standard Swiss", "MTG Swiss"]}"/><br>
+      How Many Rounds?<br>
+      <g:select name="howManyRounds" from="${[3, 4, 5]}"/><br>
+      <g:actionSubmit value="Create Tournament" action="addsettings"/>
    </g:form>
 </div>
 </body>

@@ -30,6 +30,9 @@
                   Player Name
                </th>
                <th>
+                  Points
+               </th>
+               <th>
                   Round Wins
                </th>
                <th>
@@ -53,6 +56,9 @@
                      </td>
                      <td>
                         ${result.name}
+                     </td>
+                     <td>
+                        ${result.points}
                      </td>
                      <td>
                         ${result.roundWins}

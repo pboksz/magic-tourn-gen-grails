@@ -7,35 +7,42 @@ package magic.tournament.generator
  * Time: 10:37 AM
  */
 class Tournament {
-    private static int round = 1
-    private static int maxRound = 3
+   private static int round = 1
+   private static int maxRound = 3
+   private static String format
 
-    static int getRound() {
-        return round
-    }
+   static int getRound() {
+      return round
+   }
 
-    static void nextRound() {
-        Tournament.round += 1
-    }
+   static void nextRound() {
+      Tournament.round += 1
+   }
 
-    static int getMaxRound(){
-       return maxRound
-    }
+   static int getMaxRound() {
+      return maxRound
+   }
 
-    static void setMaxRound(int max)
-    {
-       this.maxRound = max
-    }
+   static void setMaxRound(int max) {
+      this.maxRound = max
+   }
 
-    static void registerPlayers(ArrayList<String> playerNames) {
-        playerNames.each { name ->
-            PlayerPool.addNewPlayer(name)
-        }
-    }
+   static String getFormat() {
+      return format
+   }
 
-    static SortedMap<String, PlayerInfo> getRoundPairings()
-    {
-       RoundPairings rp = new RoundPairings()
-       rp.getRoundPairings()
-    }
+   static void setFormat(String format) {
+      this.format = format
+   }
+
+   static void registerPlayers(ArrayList<String> playerNames) {
+      playerNames.each { name ->
+         PlayerPool.addNewPlayer(name)
+      }
+   }
+
+   static SortedMap<String, PlayerInfo> getRoundPairings() {
+      RoundPairings rp = new RoundPairings()
+      rp.getRoundPairings()
+   }
 }

@@ -7,15 +7,23 @@ package magic.tournament.generator
  * Time: 10:33 AM
  */
 class PlayerPool {
-    private static SortedMap<String, PlayerInfo> listOfPlayers = new TreeMap<String, PlayerInfo>()
+    private static SortedMap<String, PlayerInfo> mapOfPlayers = new TreeMap<String, PlayerInfo>()
     private static Random seed = new Random()
 
-    static SortedMap<String, PlayerInfo> getListOfPlayers() {
-        return listOfPlayers
+   static SortedMap<String, PlayerInfo> getMapOfPlayers(){
+      return mapOfPlayers
+   }
+   
+    static ArrayList<PlayerInfo> getListOfPlayers() {
+       ArrayList<PlayerInfo> listOfPlayers = new ArrayList<PlayerInfo>()
+       mapOfPlayers.each { infoEntry ->
+          listOfPlayers.add(infoEntry.value)
+       }
+       return listOfPlayers
     }
 
     static void addNewPlayer(String name) {
-        listOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100)))
+        mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100)))
     }
 
    /**
@@ -27,12 +35,14 @@ class PlayerPool {
     */
    static void setRoundOutcome(String name, String opponent, int playerWins, int playerLosses)
    {
-      def player1 = listOfPlayers.get(name)
-      def player2 = listOfPlayers.get(opponent)
+      //TODO deal with byes
+      def player1 = mapOfPlayers.get(name)
+      def player2 = mapOfPlayers.get(opponent)
       //if playerWins are bigger than playerLosses player1 won and player2 lost
       if(playerWins > playerLosses)
       {
          player1.wonRound()
+         player1.addPoints(3)
          player1.addIndividualWins(playerWins)
          player1.addIndividualLosses(playerLosses)
          
@@ -43,6 +53,7 @@ class PlayerPool {
       //else player2 won, player1 lost
       else {
          player2.wonRound()
+         player2.addPoints(3)
          player2.addIndividualWins(playerWins)
          player2.addIndividualLosses(playerLosses)
 
@@ -55,39 +66,11 @@ class PlayerPool {
    }
 
     /**
-     * Sets a won round to the player with individual playerWins and playerLosses as well
-     * @param name the player name
-     * @param individualWins how many playerWins
-     * @param individualLosses how many playerLosses
-     */
-    static void setWonRound(String name, int individualWins, int individualLosses) {
-        def player = listOfPlayers.get(name)
-        player.wonRound()
-        player.addIndividualWins(individualWins)
-        player.addIndividualLosses(individualLosses)
-        save(name, player)
-    }
-
-    /**
-     * Sets a lost round to the player with individual playerWins and playerLosses as well
-     * @param name the player name
-     * @param individualWins how many playerWins
-     * @param individualLosses how many playerLosses
-     */
-    static void setLostRound(String name, int individualWins, int individualLosses) {
-        def player = listOfPlayers.get(name)
-        player.lostRound()
-        player.addIndividualWins(individualWins)
-        player.addIndividualLosses(individualLosses)
-        save(name, player)
-    }
-
-    /**
      * Sets a bye round to specific player
      * @param name the player name
      */
     static void setByeRound(String name) {
-        def player = listOfPlayers.get(name)
+        def player = mapOfPlayers.get(name)
         player.byeRound()
         save(name, player)
     }
@@ -101,13 +84,13 @@ class PlayerPool {
    static void setRoundPairing(int round, String name, String opponent)
    {
       if(name != "Bye"){
-         def player1 = listOfPlayers.get(name)
+         def player1 = mapOfPlayers.get(name)
          player1.addRoundPairing(round, opponent)
          save(name, player1)
       }
 
       if(opponent != "Bye"){
-         def player2 = listOfPlayers.get(opponent)
+         def player2 = mapOfPlayers.get(opponent)
          player2.addRoundPairing(round, name)
          save(opponent, player2)
       }
@@ -115,7 +98,7 @@ class PlayerPool {
 
    private static void save(String name, PlayerInfo player)
    {
-      listOfPlayers.remove(name)
-      listOfPlayers.put(name, player)
+      mapOfPlayers.remove(name)
+      mapOfPlayers.put(name, player)
    }
 }

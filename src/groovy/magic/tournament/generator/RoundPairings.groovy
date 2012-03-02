@@ -12,12 +12,8 @@ class RoundPairings {
     * @return a sorted list of objects that have players names
     */
    private ArrayList<PlayerInfo> sortByInitialSeed() {
-      def sorted = new ArrayList<PlayerInfo>()
       def listOfPlayers = PlayerPool.listOfPlayers
-      listOfPlayers.each { playerInfo ->
-         sorted.add(playerInfo.value)
-      }
-      return sorted.sort() { s1, s2 ->
+      return listOfPlayers.sort() { s1, s2 ->
          s1.seed <=> s2.seed
       }
    }
@@ -26,13 +22,10 @@ class RoundPairings {
     * This sorts the players by current rank for each other round
     * @return a sorted list of PlayerInfo objects
     */
+   //TODO create MTG swiss logic as well
    def ArrayList<PlayerInfo> sortByCurrentRanking() {
-      def sorted = new ArrayList<PlayerInfo>()
       def listOfPlayers = PlayerPool.listOfPlayers
-      listOfPlayers.each { playerInfo ->
-         sorted.add(playerInfo.value)
-      }
-      return sorted.sort { info1, info2 ->
+      return listOfPlayers.sort { info1, info2 ->
          if (info1.roundWins == info2.roundWins) {
             if (info1.roundByes == info2.roundByes) {
                if (info1.individualWins == info2.individualWins) {
@@ -52,7 +45,10 @@ class RoundPairings {
       }
    }
 
-   //TODO May need to mess around with how bye is given, should check if a bye was already given
+   /*TODO May need to mess around with how bye is given, should check if a bye was already given
+    *TODO also need to check if they have been paired already
+    *TODO definitely need a better way to pair players
+    */
    def SortedMap<String, PlayerInfo> getRoundPairings() {
       def roundPairingsList = new TreeMap<String, PlayerInfo>()
       def sorted = ((Tournament.round == 1) ? sortByInitialSeed() : sortByCurrentRanking())
@@ -67,7 +63,7 @@ class RoundPairings {
             p2 = sorted.get(count + 1).name
          }
          PlayerPool.setRoundPairing(Tournament.round, p1, p2)
-         roundPairingsList.put(p1, PlayerPool.listOfPlayers.get(p1))
+         roundPairingsList.put(p1, PlayerPool.mapOfPlayers.get(p1))
          count = count + 2
       }
       return roundPairingsList
