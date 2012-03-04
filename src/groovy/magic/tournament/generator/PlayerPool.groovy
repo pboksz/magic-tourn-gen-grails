@@ -14,10 +14,11 @@ class PlayerPool {
         return mapOfPlayers
     }
 
-    static void addNewPlayer(String name) {
-        mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100)))
+    static void addNewPlayer(ArrayList<String> playerNames, String name) {
+        mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100), playerNames))
     }
 
+    //TODO drop player from each possible opponent list
     static void dropPlayer(int round, String dropped, String getsBye) {
         mapOfPlayers.remove(dropped)
         def player = mapOfPlayers.get(getsBye)
@@ -39,51 +40,59 @@ class PlayerPool {
     }
 
     /**
-     * Sets the round outcome for both the player and opponentName based on player playerWins and playerLosses
+     * Sets the round outcome for both the player and opponentName based on player playerWins and opponentWins
      * @param playerName of the player
      * @param opponentName playerName of opponentName
      * @param playerWins gained by player
-     * @param playerLosses gained by player
+     * @param opponentWins gained by player
      */
-    static void setRoundOutcome(String playerName, String opponentName, int playerWins, int playerLosses) {
+    static void setRoundOutcome(String playerName, String opponentName, int playerWins, int opponentWins) {
         def player = mapOfPlayers.get(playerName)
         def opponent = mapOfPlayers.get(opponentName)
         //if both players are in this round
         if (player && opponent) {
             //if player wins set records
-            if (playerWins > playerLosses) {
+            if (playerWins > opponentWins) {
                 player.wonRound()
                 player.addPoints(3)
                 player.addIndividualWins(playerWins)
-                player.addIndividualLosses(playerLosses)
+                player.addIndividualLosses(opponentWins)
+                player.removePossibleOpponent(opponentName)
 
                 opponent.lostRound()
-                opponent.addIndividualWins(playerLosses)
+                opponent.addIndividualWins(opponentWins)
                 opponent.addIndividualLosses(playerWins)
+                opponent.removePossibleOpponent(playerName)
             }
             //else if opponent wins set these records
             else {
                 opponent.wonRound()
                 opponent.addPoints(3)
                 opponent.addIndividualWins(playerWins)
-                opponent.addIndividualLosses(playerLosses)
+                opponent.addIndividualLosses(opponentWins)
+                opponent.removePossibleOpponent(playerName)
 
                 player.lostRound()
-                player.addIndividualWins(playerLosses)
+                player.addIndividualWins(opponentWins)
                 player.addIndividualLosses(playerWins)
+                player.removePossibleOpponent(opponentName)
             }
+            save(playerName, player)
+            save(opponentName, opponent)
         }
         //else if one of these players is null set a bye
         else {
             if (player) {
                 player.byeRound()
+                player.removePossibleOpponent("Bye")
+                save(playerName, player)
             }
             else if (opponent) {
                 opponent.byeRound()
+                opponent.removePossibleOpponent("Bye")
+                save(opponentName, opponent)
             }
         }
-        save(playerName, player)
-        save(opponentName, opponent)
     }
 
     /**

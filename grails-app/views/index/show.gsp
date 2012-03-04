@@ -36,11 +36,11 @@
                             <td>
                                 ${info.name}
                                 <g:hiddenField name="player" value="${info.name}"/>
-                                <div class="drop">
-                                    <g:link action="dropplayer" params="[dropped: info.name, getsbye: info.opponent]" onclick="return dropCheck('${info.name}')">
-                                        <g:img dir="images" file="delete.png" alt="Drop Player"/>
-                                    </g:link>
-                                </div>
+                                %{--<div class="drop">--}%
+                                    %{--<g:link action="dropplayer" params="[dropped: info.name, getsbye: info.opponent]" onclick="return dropCheck('${info.name}')">--}%
+                                        %{--<g:img dir="images" file="delete.png" alt="Drop Player"/>--}%
+                                    %{--</g:link>--}%
+                                %{--</div>--}%
                             </td>
                             <td>
                                 <g:if test="${info.opponent != 'Bye'}">
@@ -53,11 +53,11 @@
                             <td onmouseover="dropOption">
                                 ${info.opponent}
                                 <g:hiddenField name="opponent" value="${info.opponent}"/>
-                                <div class="drop">
-                                    <g:link action="dropplayer" params="[dropped: info.opponent, getsbye: info.name]" onclick="return dropCheck('${info.opponent}')">
-                                        <g:img dir="images" file="delete.png" alt="Drop Player"/>
-                                    </g:link>
-                                </div>
+                                %{--<div class="drop">--}%
+                                    %{--<g:link action="dropplayer" params="[dropped: info.opponent, getsbye: info.name]" onclick="return dropCheck('${info.opponent}')">--}%
+                                        %{--<g:img dir="images" file="delete.png" alt="Drop Player"/>--}%
+                                    %{--</g:link>--}%
+                                %{--</div>--}%
                             </td>
                             <td>
                                 <g:if test="${info.opponent != 'Bye'}">

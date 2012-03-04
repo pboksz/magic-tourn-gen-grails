@@ -21,9 +21,9 @@
                <th>
                   Player Name
                </th>
-               <th>
-                  Points
-               </th>
+               %{--<th>--}%
+                  %{--Points--}%
+               %{--</th>--}%
                <th>
                   Round Wins
                </th>
@@ -49,9 +49,9 @@
                      <td>
                         ${result.name}
                      </td>
-                     <td>
-                        ${result.points}
-                     </td>
+                     %{--<td>--}%
+                        %{--${result.points}--}%
+                     %{--</td>--}%
                      <td>
                         ${result.roundWins}
                      </td>

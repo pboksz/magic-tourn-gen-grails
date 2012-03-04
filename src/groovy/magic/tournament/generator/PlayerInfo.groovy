@@ -16,12 +16,20 @@ class PlayerInfo {
     private int individualWins = 0
     private int individualLosses = 0
 
-    private SortedMap<Integer, String> roundPairings = new TreeMap<Integer, String>()
     private String opponent
+    private ArrayList<String> possibleOpponents = new ArrayList<String>()
+    private SortedMap<Integer, String> roundPairings = new TreeMap<Integer, String>()
 
-    def PlayerInfo(String name, int seed) {
+    def PlayerInfo(String name, int seed, ArrayList<String> playerNames) {
         this.name = name
         this.seed = seed
+        possibleOpponents.add("Bye")
+        playerNames.each { player ->
+            if(player != name)
+            {
+                possibleOpponents.add(player)
+            }
+        }
     }
 
     def String getName() {
@@ -60,12 +68,16 @@ class PlayerInfo {
         return individualLosses
     }
 
-    def SortedMap<Integer, String> getRoundPairings() {
-        return roundPairings
-    }
-
     def String getOpponent() {
         return opponent
+    }
+
+    def ArrayList<String> getPossibleOpponents() {
+        return possibleOpponents
+    }
+
+    def SortedMap<Integer, String> getRoundPairings() {
+        return roundPairings
     }
 
     def void wonRound() {
@@ -86,6 +98,11 @@ class PlayerInfo {
 
     def void addIndividualLosses(int losses) {
         this.individualLosses += losses
+    }
+
+    def void removePossibleOpponent(String opponent) {
+        def index = possibleOpponents.indexOf(opponent)
+        possibleOpponents.remove(index)
     }
 
     def void addRoundPairing(int round, String opponent) {

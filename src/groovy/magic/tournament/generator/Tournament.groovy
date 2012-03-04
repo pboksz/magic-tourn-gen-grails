@@ -46,7 +46,7 @@ class Tournament {
 
     def void registerPlayers(ArrayList<String> playerNames) {
         playerNames.each { name ->
-            PlayerPool.addNewPlayer(name)
+            PlayerPool.addNewPlayer(playerNames, name)
         }
     }
 }
