@@ -35,7 +35,9 @@
 
 <body>
 <div id="grailsLogo" role="banner">
-    <img src="${resource(dir: 'images', file: 'mtg-header.png')}" alt="Magic Tournament Generator"/>
+    <g:link action="newtournament" style="margin: 0">
+        <img src="${resource(dir: 'images', file: 'mtg-header.png')}" alt="Magic Tournament Generator"/>
+    </g:link>
 </div>
 
 <div class="header">

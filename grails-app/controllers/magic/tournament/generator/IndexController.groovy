@@ -124,7 +124,7 @@ class IndexController {
 
     def newtournament() {
         PlayerPool.dropAllPlayers()
-        flash.error = "The Tournament has been reset."
+        flash.error = "The tournament has been reset."
         redirect(action: "index")
     }
 }

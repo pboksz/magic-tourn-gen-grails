@@ -23,7 +23,7 @@
                         Player ${num}
                     </td>
                     <td>
-                        <g:textField name="${'player' + num}"/><br>
+                        <g:textField name="${'player' + num}"/>
                     </td>
                 </tr>
             </g:each>
