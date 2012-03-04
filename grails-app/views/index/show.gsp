@@ -6,63 +6,77 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-   <title>Magic Tournament Generator | Round ${roundNum}</title>
-</head>
 
+<html>
 <body>
-<div class="header">
-   <h2>Round ${roundNum}</h2>
-</div>
 
 <div class="main">
-   <g:form>
-      <div class="roundPairing">
-         <table>
-            <thead>
-            <tr>
-               <th>
-                  Player Name
-               </th>
-               <th>
-                  Opponent Name
-               </th>
-               <th>
-                  Player Wins
-               </th>
-               <th>
-                  Player Losses
-               </th>
-            </tr>
-            </thead>
-            <g:each in="${roundPairs}" var="pair">
-               <g:each in="${pair.value}" var="info">
-                  <tr>
-                     <td>
-                        ${info.name}
-                        <g:hiddenField name="player" value="${info.name}"/>
-                     </td>
-                     <td>
-                        ${info.opponent}
-                        <g:hiddenField name="opponent" value="${info.opponent}"/>
-                     </td>
-                     <td>
-                        <g:textField name="wins" maxlength="1"
-                                     style="width: 20px"/>
-                     </td>
-                     <td>
-                        <g:textField name="losses" maxlength="1"
-                                     style="width: 20px"/>
-                     </td>
-                  </tr>
-               </g:each>
-            </g:each>
-         </table>
-      </div>
-      <g:actionSubmit value="Next Round" action="nextround"/>
-   </g:form>
+    <g:form>
+        <div class="roundPairing">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        Player Name
+                    </th>
+                    <th>
+                        Player Wins
+                    </th>
+                    <th>
+                        Opponent Name
+                    </th>
+                    <th>
+                        Opponent Wins
+                    </th>
+                </tr>
+                </thead>
+                <g:each in="${roundPairs}" var="pair">
+                    <g:each in="${pair.value}" var="info">
+                        <tr>
+                            <td>
+                                ${info.name}
+                                <g:hiddenField name="player" value="${info.name}"/>
+                                <div class="drop">
+                                    <g:link action="dropplayer" params="[dropped: info.name, getsbye: info.opponent]" onclick="return dropCheck('${info.name}')">
+                                        <g:img dir="images" file="delete.png" alt="Drop Player"/>
+                                    </g:link>
+                                </div>
+                            </td>
+                            <td>
+                                <g:if test="${info.opponent != 'Bye'}">
+                                    <g:textField name="wins" maxlength="1" style="width: 20px"/>
+                                </g:if>
+                                <g:else>
+                                    <g:hiddenField name="wins" value="100"/>
+                                </g:else>
+                            </td>
+                            <td onmouseover="dropOption">
+                                ${info.opponent}
+                                <g:hiddenField name="opponent" value="${info.opponent}"/>
+                                <div class="drop">
+                                    <g:link action="dropplayer" params="[dropped: info.opponent, getsbye: info.name]" onclick="return dropCheck('${info.opponent}')">
+                                        <g:img dir="images" file="delete.png" alt="Drop Player"/>
+                                    </g:link>
+                                </div>
+                            </td>
+                            <td>
+                                <g:if test="${info.opponent != 'Bye'}">
+                                    <g:textField name="losses" maxlength="1" style="width: 20px"/>
+                                </g:if>
+                                <g:else>
+                                    <g:hiddenField name="losses" value="100"/>
+                                </g:else>
+                            </td>
+                        </tr>
+                    </g:each>
+                </g:each>
+            </table>
+        </div>
+
+        <div class="options">
+            <g:actionSubmit value="Next Round" action="nextround"/>
+        </div>
+    </g:form>
 </div>
 </body>
 </html>

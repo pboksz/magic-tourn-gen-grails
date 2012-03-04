@@ -6,17 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<head>
-   <title>Magic Tournament Generator | Registered Players</title>
-</head>
-
 <body>
-<div class="header">
-   <h2>Registered Players</h2>
-</div>
-
 <div class="main">
    <g:form>
       <div class="players">

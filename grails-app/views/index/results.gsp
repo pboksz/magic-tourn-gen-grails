@@ -6,16 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<head>
-   <title>Magic Tournament Generator | Final Results</title>
-</head>
-
 <body>
-<div class="header">
-   <h2>Final Results</h2>
-</div>
 
 <div class="main">
    <g:form>
@@ -79,7 +71,6 @@
             </g:each>
          </table>
       </div>
-      <g:actionSubmit value="Next Round" action="nextround"/>
    </g:form>
 </div>
 </body>

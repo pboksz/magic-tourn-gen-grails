@@ -1,3 +1,5 @@
+package magic.tournament.generator
+
 import grails.test.mixin.TestFor
 import magic.tournament.generator.RoundPairings
 /**

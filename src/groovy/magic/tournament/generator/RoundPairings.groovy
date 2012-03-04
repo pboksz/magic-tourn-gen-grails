@@ -7,6 +7,14 @@ package magic.tournament.generator
  * Time: 2:28 PM
  */
 class RoundPairings {
+
+    Tournament tourn
+
+    public RoundPairings(Tournament tourn)
+    {
+        this.tourn = tourn
+    }
+
    /**
     * This sorts the initial players by seed for the first round
     * @return a sorted list of objects that have players names
@@ -22,7 +30,6 @@ class RoundPairings {
     * This sorts the players by current rank for each other round
     * @return a sorted list of PlayerInfo objects
     */
-   //TODO create MTG swiss logic as well
    def ArrayList<PlayerInfo> sortByCurrentRanking() {
       def listOfPlayers = PlayerPool.listOfPlayers
       return listOfPlayers.sort { info1, info2 ->
@@ -47,11 +54,10 @@ class RoundPairings {
 
    /*TODO May need to mess around with how bye is given, should check if a bye was already given
     *TODO also need to check if they have been paired already
-    *TODO definitely need a better way to pair players
     */
    def SortedMap<String, PlayerInfo> getRoundPairings() {
       def roundPairingsList = new TreeMap<String, PlayerInfo>()
-      def sorted = ((Tournament.round == 1) ? sortByInitialSeed() : sortByCurrentRanking())
+      def sorted = ((tourn.getRound() == 1) ? sortByInitialSeed() : sortByCurrentRanking())
       def count = 0
       while (count <= (sorted.size() - 1)) {
          def p1 = sorted.get(count).name
@@ -62,7 +68,7 @@ class RoundPairings {
          else {
             p2 = sorted.get(count + 1).name
          }
-         PlayerPool.setRoundPairing(Tournament.round, p1, p2)
+         PlayerPool.setRoundPairing(tourn.getRound(), p1, p2)
          roundPairingsList.put(p1, PlayerPool.mapOfPlayers.get(p1))
          count = count + 2
       }

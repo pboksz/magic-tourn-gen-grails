@@ -7,42 +7,46 @@ package magic.tournament.generator
  * Time: 10:37 AM
  */
 class Tournament {
-   private static int round = 1
-   private static int maxRound = 3
-   private static String format
+    private int round = 1
+    private int numPlayers
+    private int maxRound
+    private int bestOf
+    private String format
 
-   static int getRound() {
-      return round
-   }
+    public Tournament(int numPlayers, int maxRound, int bestOf, String format) {
+        this.numPlayers = numPlayers
+        this.maxRound = maxRound
+        this.bestOf = bestOf
+        this.format = format
+    }
 
-   static void nextRound() {
-      Tournament.round += 1
-   }
+    def int getRound() {
+        return round
+    }
 
-   static int getMaxRound() {
-      return maxRound
-   }
+    def void nextRound() {
+        this.round += 1
+    }
 
-   static void setMaxRound(int max) {
-      this.maxRound = max
-   }
+    def int getNumPlayers() {
+        return numPlayers
+    }
 
-   static String getFormat() {
-      return format
-   }
+    def int getMaxRound() {
+        return maxRound
+    }
 
-   static void setFormat(String format) {
-      this.format = format
-   }
+    def int getBestOf() {
+        return bestOf
+    }
 
-   static void registerPlayers(ArrayList<String> playerNames) {
-      playerNames.each { name ->
-         PlayerPool.addNewPlayer(name)
-      }
-   }
+    def String getFormat() {
+        return format
+    }
 
-   static SortedMap<String, PlayerInfo> getRoundPairings() {
-      RoundPairings rp = new RoundPairings()
-      rp.getRoundPairings()
-   }
+    def void registerPlayers(ArrayList<String> playerNames) {
+        playerNames.each { name ->
+            PlayerPool.addNewPlayer(name)
+        }
+    }
 }
