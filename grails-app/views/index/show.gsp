@@ -23,6 +23,9 @@
                         Player Wins
                     </th>
                     <th>
+
+                    </th>
+                    <th>
                         Opponent Name
                     </th>
                     <th>
@@ -46,8 +49,11 @@
                                  <g:textField name="wins" maxlength="1" style="width: 20px"/>
                              </g:if>
                              <g:else>
-                                 <g:hiddenField name="wins" value="100"/>
+                                 <g:hiddenField name="wins" value="-1"/>
                              </g:else>
+                         </td>
+                         <td>
+                             <strong>VS</strong>
                          </td>
                          <td onmouseover="dropOption">
                              ${pair.opponent}
@@ -63,7 +69,7 @@
                                  <g:textField name="losses" maxlength="1" style="width: 20px"/>
                              </g:if>
                              <g:else>
-                                 <g:hiddenField name="losses" value="100"/>
+                                 <g:hiddenField name="losses" value="-1"/>
                              </g:else>
                          </td>
                      </tr>

@@ -10,69 +10,71 @@
 <body>
 
 <div class="main">
-   <g:form>
-      <div class="roundPairing">
-         <table>
-            <thead>
-            <tr>
-               <th>
-                  Place
-               </th>
-               <th>
-                  Player Name
-               </th>
-               %{--<th>--}%
-                  %{--Points--}%
-               %{--</th>--}%
-               <th>
-                  Round Wins
-               </th>
-               <th>
-                  Round Byes
-               </th>
-               <th>
-                  Round Losses
-               </th>
-               <th>
-                  Individual Wins
-               </th>
-               <th>
-                  Individual Losses
-               </th>
-            </tr>
-            </thead>
-            <g:each in="${results}" var="result">
-                  <tr>
-                     <td>
-                        ${result.rank}
-                     </td>
-                     <td>
-                        ${result.name}
-                     </td>
-                     %{--<td>--}%
+    <g:form>
+        <div class="roundPairing">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        Place
+                    </th>
+                    <th>
+                        Player Name
+                    </th>
+                    %{--<th>--}%
+                    %{--Points--}%
+                    %{--</th>--}%
+                    <th>
+                        Round Wins
+                    </th>
+                    <th>
+                        Round Byes
+                    </th>
+                    <th>
+                        Round Losses
+                    </th>
+                    <th>
+                        Individual Wins
+                    </th>
+                    <th>
+                        Individual Losses
+                    </th>
+                </tr>
+                </thead>
+                <g:each in="${results}" var="result">
+                    <tr>
+                        <td>
+                            ${result.rank}
+                        </td>
+                        <td>
+                            ${result.name}
+                        </td>
+                        %{--<td>--}%
                         %{--${result.points}--}%
-                     %{--</td>--}%
-                     <td>
-                        ${result.roundWins}
-                     </td>
-                     <td>
-                        ${result.roundByes}
-                     </td>
-                     <td>
-                        ${result.roundLosses}
-                     </td>
-                     <td>
-                        ${result.individualWins}
-                     </td>
-                     <td>
-                        ${result.individualLosses}
-                     </td>
-                  </tr>
-            </g:each>
-         </table>
-      </div>
-      <g:actionSubmit value="Next Round" action="show"/>
-   </g:form>
+                        %{--</td>--}%
+                        <td>
+                            ${result.roundWins}
+                        </td>
+                        <td>
+                            ${result.roundByes}
+                        </td>
+                        <td>
+                            ${result.roundLosses}
+                        </td>
+                        <td>
+                            ${result.individualWins}
+                        </td>
+                        <td>
+                            ${result.individualLosses}
+                        </td>
+                    </tr>
+                </g:each>
+            </table>
+        </div>
+        <g:if test="${flash.title != 'Final Results'}">
+            <g:actionSubmit value="Next Round" action="show"/>
+        </g:if>
+    </g:form>
 </div>
 </body>
 </html>

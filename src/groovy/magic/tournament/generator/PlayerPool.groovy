@@ -40,31 +40,32 @@ class PlayerPool {
         return listOfPlayers
     }
 
-   /**
-    * sets the outcome of the round for each player
-    * @param playerName the player's playerName
-    * @param opponentName the opponentName's playerName
-    * @param wins the player's wins
-    * @param losses the player's losses
-    */
-   static void setPlayerOutcome(String playerName, String opponentName, int wins, int losses) {
-      def player = mapOfPlayers.get(playerName)
-      
-      if(opponentName != "Bye"){
-         if(wins > losses) {
-            player.wonRound()
-         }
-         else {
-            player.lostRound()
-         }
-         player.addIndividualWins(wins)
-         player.addIndividualLosses(losses)
-      }
-      else {
-         player.byeRound()
-      }
-      save(player)
-   }
+    /**
+     * sets the outcome of the round for each player
+     * @param playerName the player's playerName
+     * @param opponentName the opponentName's playerName
+     * @param wins the player's wins
+     * @param losses the player's losses
+     */
+    static void setPlayerOutcome(String playerName, String opponentName, int wins, int losses) {
+        def player = mapOfPlayers.get(playerName)
+        if (player) {
+            if (opponentName != "Bye") {
+                if (wins > losses) {
+                    player.wonRound()
+                }
+                else {
+                    player.lostRound()
+                }
+                player.addIndividualWins(wins)
+                player.addIndividualLosses(losses)
+            }
+            else {
+                player.byeRound()
+            }
+            save(player)
+        }
+    }
 
     /**
      * Sets both players info object to record the round and opponentName for the round
@@ -88,11 +89,11 @@ class PlayerPool {
         }
     }
 
-   /**
-    * saves the player to the map object by removing the old one, and adding the new one
-    * @param playerName the player's playerName
-    * @param player the PlayerInfo object for that player
-    */
+    /**
+     * saves the player to the map object by removing the old one, and adding the new one
+     * @param playerName the player's playerName
+     * @param player the PlayerInfo object for that player
+     */
     private static void save(PlayerInfo player) {
         def name = player.name
         mapOfPlayers.remove(name)

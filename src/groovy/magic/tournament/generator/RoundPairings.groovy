@@ -56,18 +56,12 @@ class RoundPairings {
     * sets each players final ranking when called on
     * @returns a list of players with final ranks in place
     */
-   def ArrayList<PlayerInfo> showFinalRankings() {
+   def ArrayList<PlayerInfo> showCurrentRankings() {
       def listOfPlayers = sortByCurrentRanking()
       def rank = 1
       listOfPlayers.each { player ->
          player.setRank(rank++)
       }
-      printRankings(listOfPlayers)
-      return listOfPlayers
-   }
-
-   def ArrayList<PlayerInfo> showCurrentStandings() {
-      def listOfPlayers = sortByCurrentRanking()
       printRankings(listOfPlayers)
       return listOfPlayers
    }

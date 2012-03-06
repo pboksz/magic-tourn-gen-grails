@@ -12,7 +12,7 @@ class IndexController {
     }
 
     def getRoundPairings() {
-       return roundPairings
+        return roundPairings
     }
 
     def index() {
@@ -64,8 +64,8 @@ class IndexController {
     }
 
     def firstround() {
-       roundPairings.setInitialRoundPairings()
-       redirect(action: "show")
+        roundPairings.setInitialRoundPairings()
+        redirect(action: "show")
     }
 
     def show() {
@@ -73,11 +73,11 @@ class IndexController {
         flash.message = "Please enter the wins of each player and opponent."
         def listOfPairs = new ArrayList<PlayerInfo>()
         def mapOfPlayers = (SortedMap<String, PlayerInfo>) PlayerPool.mapOfPlayers.clone()
-        while(mapOfPlayers.size() != 0) {
-           def player = mapOfPlayers.get(mapOfPlayers.firstKey())
-           listOfPairs.add(player)
-           mapOfPlayers.remove(player.name)
-           mapOfPlayers.remove(player.opponent)
+        while (mapOfPlayers.size() != 0) {
+            def player = mapOfPlayers.get(mapOfPlayers.firstKey())
+            listOfPairs.add(player)
+            mapOfPlayers.remove(player.name)
+            mapOfPlayers.remove(player.opponent)
         }
         render(view: "show", model: [listOfPairs: listOfPairs])
     }
@@ -88,69 +88,88 @@ class IndexController {
         def playerWins = params.wins
         def playerLosses = params.losses
         def len = players.length - 1
-        def missing = false
+        def hasErrors = false
 
-        //if any are empty redirect back
+        //if there are any errors in the input set that there are errors
+        def maxWins = (int) Math.ceil(tournament.bestOf / 2)
         for (i in 0..len) {
-            if ((playerWins[i] == "") || (playerLosses[i] == "")) {
-                missing = true
+            if (playerWins[i] != "-1") {
+                if ((playerWins[i] ==~ /[0-9]/) && (playerLosses[i] ==~ /[0-9]/)) {
+                    def wins = Integer.valueOf(playerWins[i])
+                    def losses = Integer.valueOf(playerLosses[i])
+                    if ((wins == "") || (losses == "")) {
+                        hasErrors = true
+                    }
+                    if ((wins > maxWins) || (wins < 0)) {
+                        hasErrors = true
+                    }
+                    if ((losses > maxWins) || (losses < 0)) {
+                        hasErrors = true
+                    }
+                    if ((wins + losses > tournament.bestOf)) {
+                        hasErrors = true
+                    }
+                }
+                else {
+                    hasErrors = true
+                }
             }
         }
 
-        //if all the wins and losses are entered
-        if (!missing) {
-            for (i in 0..len) {
-                def playerName = players[i]
-                def opponentName = opponents[i]
-                def playerWon = Integer.valueOf(playerWins[i])
-                def playerLost = Integer.valueOf(playerLosses[i])
-                //outcome for first player
-                PlayerPool.setPlayerOutcome(playerName, opponentName, playerWon, playerLost)
-                //then the outcome for the second player (flipping the names and wins/losses as they are directly inverse)
-                PlayerPool.setPlayerOutcome(opponentName, playerName, playerLost, playerWon)
-            }
+            //if all the wins and losses are entered
+            if (!hasErrors) {
+                for (i in 0..len) {
+                    def playerName = players[i]
+                    def opponentName = opponents[i]
+                    def playerWon = Integer.valueOf(playerWins[i])
+                    def playerLost = Integer.valueOf(playerLosses[i])
+                    //outcome for first player
+                    PlayerPool.setPlayerOutcome(playerName, opponentName, playerWon, playerLost)
+                    //then the outcome for the second player (flipping the names and wins/losses as they are directly inverse)
+                    PlayerPool.setPlayerOutcome(opponentName, playerName, playerLost, playerWon)
+                }
 
-            //increment round
-            tournament.nextRound()
+                //increment round
+                tournament.nextRound()
 
-            //if this is the last round, show the results
-            if (tournament.getRound() > tournament.maxRound) {
-                redirect(action: "results")
+                //if this is the last round, show the results
+                if (tournament.getRound() > tournament.maxRound) {
+                    redirect(action: "results")
+                }
+                //else show the next round grid
+                else {
+                    //set pairings for the next round
+                    roundPairings.setRoundPairings()
+                    redirect(action: "current")
+                }
             }
-            //else show the next round grid
+            //else return an error saying that all of the wins need to be recorded
             else {
-                //set pairings for the next round
-                roundPairings.setRoundPairings()
-                redirect(action: "current")
+                flash.error = "The values for wins for each player has to be a number, cannot be blank, cannot be less than 0 and should sum to " + tournament.bestOf + " or less."
+                redirect(action: "show")
             }
         }
-        //else return an error saying that all of the wins need to be recorded
-        else {
-            flash.error = "All of the wins for each player and opponent need to be entered to continue."
+
+        def current() {
+            flash.title = "Current Standings"
+            def results = roundPairings.showCurrentRankings()
+            render(view: "results", model: [results: results])
+        }
+
+        def results() {
+            flash.title = "Final Results"
+            def results = roundPairings.showCurrentRankings()
+            render(view: "results", model: [results: results])
+        }
+
+        def dropplayer() {
+            PlayerPool.dropPlayer(params.dropped, params.getsbye)
             redirect(action: "show")
         }
-    }
 
-    def current() {
-       flash.title = "Current Standings"
-       def results = roundPairings.showCurrentStandings()
-       render(view: "results", model: [results: results])
+        def newtournament() {
+            PlayerPool.dropAllPlayers()
+            flash.error = "The tournament has been reset."
+            redirect(action: "index")
+        }
     }
-
-    def results() {
-        flash.title = "Final Results"
-        def results = roundPairings.showFinalRankings()
-        render(view: "results", model: [results: results])
-    }
-
-    def dropplayer() {
-       PlayerPool.dropPlayer(params.dropped, params.getsbye)
-       redirect(action: "show")
-    }
-
-    def newtournament() {
-        PlayerPool.dropAllPlayers()
-        flash.error = "The tournament has been reset."
-        redirect(action: "index")
-    }
-}
