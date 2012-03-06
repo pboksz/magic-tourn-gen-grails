@@ -71,6 +71,7 @@
             </g:each>
          </table>
       </div>
+      <g:actionSubmit value="Next Round" action="show"/>
    </g:form>
 </div>
 </body>

@@ -5,9 +5,14 @@ class IndexController {
     static layout = "main"
 
     private static Tournament tournament
+    private RoundPairings roundPairings = new RoundPairings(tournament)
 
     def getTournament() {
         return tournament
+    }
+
+    def getRoundPairings() {
+       return roundPairings
     }
 
     def index() {
@@ -58,21 +63,23 @@ class IndexController {
         }
     }
 
-    def show() {
-        RoundPairings rp = new RoundPairings(tournament)
-        flash.title = "Round " + tournament.getRound()
-        flash.message = "Please enter the wins and losses of the player on the left."
-        def roundPairs = rp.getRoundPairings()
-        render(view: "show", model: [roundPairs: roundPairs])
-    }
-
-    def dropplayer() {
-        PlayerPool.dropPlayer(params.dropped, params.getsbye)
-        redirect(action: "show")
-    }
-
     def firstround() {
-        redirect(action: "show")
+       roundPairings.setInitialRoundPairings()
+       redirect(action: "show")
+    }
+
+    def show() {
+        flash.title = "Round " + tournament.getRound()
+        flash.message = "Please enter the wins of each player and opponent."
+        def listOfPairs = new ArrayList<PlayerInfo>()
+        def mapOfPlayers = (SortedMap<String, PlayerInfo>) PlayerPool.mapOfPlayers.clone()
+        while(mapOfPlayers.size() != 0) {
+           def player = mapOfPlayers.get(mapOfPlayers.firstKey())
+           listOfPairs.add(player)
+           mapOfPlayers.remove(player.name)
+           mapOfPlayers.remove(player.opponent)
+        }
+        render(view: "show", model: [listOfPairs: listOfPairs])
     }
 
     def nextround() {
@@ -86,40 +93,59 @@ class IndexController {
         //if any are empty redirect back
         for (i in 0..len) {
             if ((playerWins[i] == "") || (playerLosses[i] == "")) {
-                flash.message = "Error, wins and losses cannot be blank."
                 missing = true
             }
         }
 
+        //if all the wins and losses are entered
         if (!missing) {
-            //else add the outcome
             for (i in 0..len) {
-                PlayerPool.setRoundOutcome(players[i], opponents[i], Integer.valueOf(playerWins[i]), Integer.valueOf(playerLosses[i]))
+                def playerName = players[i]
+                def opponentName = opponents[i]
+                def playerWon = Integer.valueOf(playerWins[i])
+                def playerLost = Integer.valueOf(playerLosses[i])
+                //outcome for first player
+                PlayerPool.setPlayerOutcome(playerName, opponentName, playerWon, playerLost)
+                //then the outcome for the second player (flipping the names and wins/losses as they are directly inverse)
+                PlayerPool.setPlayerOutcome(opponentName, playerName, playerLost, playerWon)
             }
+
             //increment round
             tournament.nextRound()
+
+            //if this is the last round, show the results
             if (tournament.getRound() > tournament.maxRound) {
                 redirect(action: "results")
             }
+            //else show the next round grid
             else {
-                redirect(action: "show")
+                //set pairings for the next round
+                roundPairings.setRoundPairings()
+                redirect(action: "current")
             }
         }
+        //else return an error saying that all of the wins need to be recorded
         else {
-            flash.error = "All of the wins need to be recorded."
+            flash.error = "All of the wins for each player and opponent need to be entered to continue."
             redirect(action: "show")
         }
     }
 
+    def current() {
+       flash.title = "Current Standings"
+       def results = roundPairings.showCurrentStandings()
+       render(view: "results", model: [results: results])
+    }
+
     def results() {
         flash.title = "Final Results"
-        RoundPairings rp = new RoundPairings()
-        def results = rp.sortByCurrentRanking()
-        def rank = 1
-        results.each { result ->
-            result.setRank(rank++)
-        }
+        def results = roundPairings.showFinalRankings()
         render(view: "results", model: [results: results])
+    }
+
+    def dropplayer() {
+       PlayerPool.dropPlayer(params.dropped, params.getsbye)
+       redirect(action: "show")
     }
 
     def newtournament() {

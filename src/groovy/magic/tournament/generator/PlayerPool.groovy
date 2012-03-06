@@ -18,13 +18,14 @@ class PlayerPool {
         mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100), playerNames))
     }
 
-    //TODO drop player from each possible opponent list
+    //TODO drop player from each possible opponentName list
+    //This is postponed for now
     static void dropPlayer(int round, String dropped, String getsBye) {
         mapOfPlayers.remove(dropped)
         def player = mapOfPlayers.get(getsBye)
         player.byeRound()
         player.removeRoundPairing(round)
-        save(getsBye, player)
+        save(player)
     }
 
     static void dropAllPlayers() {
@@ -39,83 +40,61 @@ class PlayerPool {
         return listOfPlayers
     }
 
-    /**
-     * Sets the round outcome for both the player and opponentName based on player playerWins and opponentWins
-     * @param playerName of the player
-     * @param opponentName playerName of opponentName
-     * @param playerWins gained by player
-     * @param opponentWins gained by player
-     */
-    static void setRoundOutcome(String playerName, String opponentName, int playerWins, int opponentWins) {
-        def player = mapOfPlayers.get(playerName)
-        def opponent = mapOfPlayers.get(opponentName)
-        //if both players are in this round
-        if (player && opponent) {
-            //if player wins set records
-            if (playerWins > opponentWins) {
-                player.wonRound()
-                player.addPoints(3)
-                player.addIndividualWins(playerWins)
-                player.addIndividualLosses(opponentWins)
-                player.removePossibleOpponent(opponentName)
-
-                opponent.lostRound()
-                opponent.addIndividualWins(opponentWins)
-                opponent.addIndividualLosses(playerWins)
-                opponent.removePossibleOpponent(playerName)
-            }
-            //else if opponent wins set these records
-            else {
-                opponent.wonRound()
-                opponent.addPoints(3)
-                opponent.addIndividualWins(playerWins)
-                opponent.addIndividualLosses(opponentWins)
-                opponent.removePossibleOpponent(playerName)
-
-                player.lostRound()
-                player.addIndividualWins(opponentWins)
-                player.addIndividualLosses(playerWins)
-                player.removePossibleOpponent(opponentName)
-            }
-            save(playerName, player)
-            save(opponentName, opponent)
-        }
-        //else if one of these players is null set a bye
-        else {
-            if (player) {
-                player.byeRound()
-                player.removePossibleOpponent("Bye")
-                save(playerName, player)
-            }
-            else if (opponent) {
-                opponent.byeRound()
-                opponent.removePossibleOpponent("Bye")
-                save(opponentName, opponent)
-            }
-        }
-    }
+   /**
+    * sets the outcome of the round for each player
+    * @param playerName the player's playerName
+    * @param opponentName the opponentName's playerName
+    * @param wins the player's wins
+    * @param losses the player's losses
+    */
+   static void setPlayerOutcome(String playerName, String opponentName, int wins, int losses) {
+      def player = mapOfPlayers.get(playerName)
+      
+      if(opponentName != "Bye"){
+         if(wins > losses) {
+            player.wonRound()
+         }
+         else {
+            player.lostRound()
+         }
+         player.addIndividualWins(wins)
+         player.addIndividualLosses(losses)
+      }
+      else {
+         player.byeRound()
+      }
+      save(player)
+   }
 
     /**
      * Sets both players info object to record the round and opponentName for the round
      * @param round number
-     * @param name of player1
-     * @param opponent playerName of player2
+     * @param playerName name of player
+     * @param opponentName name of opponent
      */
-    static void setRoundPairing(int round, String name, String opponent) {
-        if (name != "Bye") {
-            def player1 = mapOfPlayers.get(name)
-            player1.addRoundPairing(round, opponent)
-            save(name, player1)
+    static void setRoundPairing(int round, String playerName, String opponentName) {
+        if (playerName != "Bye") {
+            def player = mapOfPlayers.get(playerName)
+            player.addRoundPairing(round, opponentName)
+            player.removePossibleOpponent(opponentName)
+            save(player)
         }
 
-        if (opponent != "Bye") {
-            def player2 = mapOfPlayers.get(opponent)
-            player2.addRoundPairing(round, name)
-            save(opponent, player2)
+        if (opponentName != "Bye") {
+            def opponent = mapOfPlayers.get(opponentName)
+            opponent.addRoundPairing(round, playerName)
+            opponent.removePossibleOpponent(playerName)
+            save(opponent)
         }
     }
 
-    private static void save(String name, PlayerInfo player) {
+   /**
+    * saves the player to the map object by removing the old one, and adding the new one
+    * @param playerName the player's playerName
+    * @param player the PlayerInfo object for that player
+    */
+    private static void save(PlayerInfo player) {
+        def name = player.name
         mapOfPlayers.remove(name)
         mapOfPlayers.put(name, player)
     }

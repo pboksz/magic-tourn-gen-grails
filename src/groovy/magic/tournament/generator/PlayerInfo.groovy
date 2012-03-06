@@ -23,13 +23,7 @@ class PlayerInfo {
     def PlayerInfo(String name, int seed, ArrayList<String> playerNames) {
         this.name = name
         this.seed = seed
-        possibleOpponents.add("Bye")
-        playerNames.each { player ->
-            if(player != name)
-            {
-                possibleOpponents.add(player)
-            }
-        }
+        addPossibleOpponents(playerNames)
     }
 
     def String getName() {
@@ -82,6 +76,7 @@ class PlayerInfo {
 
     def void wonRound() {
         this.roundWins += 1
+        this.points += 3
     }
 
     def void lostRound() {
@@ -100,6 +95,26 @@ class PlayerInfo {
         this.individualLosses += losses
     }
 
+    def void addPossibleOpponents(ArrayList<String> playerNames) {
+       possibleOpponents.add("Bye")
+       playerNames.each { player ->
+          if(player != name)
+          {
+             possibleOpponents.add(player)
+          }
+       }
+    }
+
+    def boolean canPlayThisPlayer(String opponentName) {
+       def canPlay = false
+       possibleOpponents.each { opponent ->
+          if(opponentName.equals(opponent)){
+             canPlay = true
+          }
+       }
+       return canPlay
+    }
+   
     def void removePossibleOpponent(String opponent) {
         def index = possibleOpponents.indexOf(opponent)
         possibleOpponents.remove(index)
@@ -116,9 +131,5 @@ class PlayerInfo {
 
     def void setRank(int rank) {
         this.rank = rank
-    }
-
-    def void addPoints(int howMany) {
-        this.points += howMany
     }
 }
