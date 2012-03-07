@@ -64,11 +64,11 @@ class IndexController {
     }
 
     def firstround() {
-        roundPairings.setInitialRoundPairings()
         redirect(action: "show")
     }
 
     def show() {
+        roundPairings.setRoundPairings()
         flash.title = "Round " + tournament.getRound()
         flash.message = "Please enter the wins of each player and opponent."
         def listOfPairs = new ArrayList<PlayerInfo>()
@@ -138,8 +138,6 @@ class IndexController {
                 }
                 //else show the next round grid
                 else {
-                    //set pairings for the next round
-                    roundPairings.setRoundPairings()
                     redirect(action: "current")
                 }
             }

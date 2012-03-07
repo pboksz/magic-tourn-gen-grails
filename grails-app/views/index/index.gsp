@@ -30,10 +30,10 @@
                 </thead>
                 <tr>
                     <td>
-                        <g:select name="howManyPlayers" from="${[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}"/><br>
+                        <g:select name="howManyPlayers" from="${[4, 5, 6, 7, 8]}"/><br>
                     </td>
                     <td>
-                        <g:select name="howManyRounds" from="${[3, 4, 5]}"/><br>
+                        <g:select name="howManyRounds" from="${[3]}"/><br>
                     </td>
                     <td>
                         <g:select name="bestOf" from="${[3, 5]}"/><br>

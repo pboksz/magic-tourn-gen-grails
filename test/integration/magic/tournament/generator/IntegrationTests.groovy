@@ -16,24 +16,47 @@ class IntegrationTests {
    }
 
    @Test
-   void test4PlayerTournament() {
-      def rankedPlayers = runTournament(4, 3, 3, "Swiss")
+   void test4PlayerTournament2Wins1Losses() {
+      def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 1)
       def failures = assertValidPairings(rankedPlayers)
-      printRankings(rankedPlayers)
       println "Number of Failures = " + failures
    }
 
    @Test
-   void test4PlayerTournament100Times() {
+   void test4PlayerTournament2Wins0Losses() {
+      def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 0)
+      def failures = assertValidPairings(rankedPlayers)
+      println "Number of Failures = " + failures
+   }
+
+   @Test
+   void test4PlayerTournamentMultipleTimes() {
       def failures = 0
-      for(i in 0..100){
-         def rankedPlayers = runTournament(4, 3, 3, "Swiss")
+      for(i in 0..30){
+         def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 0)
+         failures += assertValidPairings(rankedPlayers)
+
+         rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 1)
          failures += assertValidPairings(rankedPlayers)
       }
       println "Number of Failures = " + failures
    }
 
-   private runTournament(int numPlayers, int maxRound, int bestOf, String format) {
+   @Test
+   void test5PlayerTournament2Wins1Losses() {
+      def rankedPlayers = runTournament(5, 3, 3, "Swiss", 2, 1)
+      def failures = assertValidPairings(rankedPlayers)
+      println "Number of Failures = " + failures
+   }
+
+   @Test
+   void test5PlayerTournament2Wins0Losses() {
+      def rankedPlayers = runTournament(5, 3, 3, "Swiss", 2, 0)
+      def failures = assertValidPairings(rankedPlayers)
+      println "Number of Failures = " + failures
+   }
+
+   private runTournament(int numPlayers, int maxRound, int bestOf, String format, int wins, int losses) {
       //create new tournament
       Tournament tournament = new Tournament(numPlayers, maxRound, bestOf, format)
       RoundPairings rp = new RoundPairings(tournament)
@@ -50,44 +73,34 @@ class IntegrationTests {
 
       //for each round
       while(tournament.round <= maxRound){
-         tournament.round == 1 ? rp.setInitialRoundPairings() : rp.setRoundPairings()
+         //set pairings
+         rp.setRoundPairings()
+
+         //get the map of players
          def mapOfPlayers = (SortedMap<String, PlayerInfo>) PlayerPool.mapOfPlayers.clone()
+
+         //for each player set the outcome
          while(mapOfPlayers.size() != 0){
-            //find the players
+            //find the player and set outcome
             def player = mapOfPlayers.get(mapOfPlayers.firstKey())
-            def opponent = mapOfPlayers.get(player.opponent)
+            PlayerPool.setPlayerOutcome(player.name, player.opponent, wins, losses)
 
-            //set outcomes for both
-            PlayerPool.setPlayerOutcome(player.name, opponent.name, 2, 0)
-            PlayerPool.setPlayerOutcome(opponent.name, player.name, 0, 2)
+            //if player does not have a bye set the opponent's outcome as well
+            if(player.opponent != "Bye"){
+               def opponent = mapOfPlayers.get(player.opponent)
+               PlayerPool.setPlayerOutcome(opponent.name, opponent.opponent, losses, wins)
+               mapOfPlayers.remove(opponent.name)
+            }
 
-            //remove them from the list
+            //remove player from the list
             mapOfPlayers.remove(player.name)
-            mapOfPlayers.remove(opponent.name)
          }
+         rp.showCurrentRankings()
          //increment tournament
          tournament.nextRound()
       }
 
-      return rp.showFinalRankings()
-   }
-
-   private printRankings(ArrayList<PlayerInfo> rankedPlayers) {
-      rankedPlayers.each { player ->
-         println player.rank + ") " + player.name
-         println "\tTotal Points: " + player.points
-         println "\tRound Wins: " + player.roundWins
-         println "\tRound Byes: " + player.roundByes
-         println "\tRound Losses: " + player.roundLosses
-         println "\tIndividual Wins: " + player.individualWins
-         println "\tIndividual Losses: " + player.individualLosses
-         def opponentsList = player.roundPairings
-         println "\tOpponents Per Round:"
-         opponentsList.each { round ->
-            println "\t\t" + round.key + ") " + round.value
-         }
-         println ""
-      }
+      return rp.showCurrentRankings()
    }
 
    private int assertValidPairings(ArrayList<PlayerInfo> rankedPlayers) {
@@ -110,7 +123,7 @@ class IntegrationTests {
 //               assert name != other.value
             }
          }
-//         assert numByes <= 1;
+         assert numByes <= 1;
       }
       return duplicatePairs
    }

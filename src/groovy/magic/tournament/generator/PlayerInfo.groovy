@@ -132,4 +132,8 @@ class PlayerInfo {
     def void setRank(int rank) {
         this.rank = rank
     }
+
+    def boolean canUseBye() {
+       return possibleOpponents.contains("Bye")
+    }
 }
