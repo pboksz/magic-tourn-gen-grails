@@ -12,7 +12,7 @@
 
 <div class="main">
     <g:form>
-        <div class="roundPairing">
+        <div class="show">
             <table>
                 <thead>
                 <tr>
@@ -22,8 +22,8 @@
                     <th>
                         Player Wins
                     </th>
-                    <th>
-
+                    <th class="versus">
+                        VS
                     </th>
                     <th>
                         Opponent Name
@@ -52,7 +52,7 @@
                                  <g:hiddenField name="wins" value="-1"/>
                              </g:else>
                          </td>
-                         <td>
+                         <td class="versus">
                              <strong>VS</strong>
                          </td>
                          <td onmouseover="dropOption">
@@ -78,7 +78,7 @@
         </div>
 
         <div class="options">
-            <g:actionSubmit value="Next Round" action="nextround"/>
+            <g:actionSubmit value="Submit Round Results" action="nextround"/>
         </div>
     </g:form>
 </div>

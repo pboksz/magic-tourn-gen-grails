@@ -21,7 +21,7 @@
                         How Many Rounds?
                     </th>
                     <th>
-                        Best Of?
+                        Play To Best Of?
                     </th>
                     <th>
                         Which Format?

@@ -160,10 +160,11 @@ class IndexController {
             render(view: "results", model: [results: results])
         }
 
-        def dropplayer() {
-            PlayerPool.dropPlayer(params.dropped, params.getsbye)
-            redirect(action: "show")
-        }
+        //TODO work on drop player later
+//        def dropplayer() {
+//            PlayerPool.dropPlayer(params.dropped, params.getsbye)
+//            redirect(action: "show")
+//        }
 
         def newtournament() {
             PlayerPool.dropAllPlayers()

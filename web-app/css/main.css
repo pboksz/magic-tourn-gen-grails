@@ -605,3 +605,23 @@ a.skip {
 .drop {
     float: right;
 }
+
+.settings th, td {
+    width: 25%;
+}
+
+.players th, td {
+    width: 50%;
+}
+
+.show th, td {
+    width: 23%;
+}
+
+.show .versus {
+    width: 8%
+}
+
+.results .value {
+    width: 10%
+}
