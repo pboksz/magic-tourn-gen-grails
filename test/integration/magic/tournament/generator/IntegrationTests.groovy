@@ -19,47 +19,92 @@ class IntegrationTests {
    void test4PlayerTournament2Wins1Losses() {
       def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 1)
       def failures = assertValidPairings(rankedPlayers)
-      println "Number of Failures = " + failures
-   }
-
-   @Test
-   void test4PlayerTournament2Wins0Losses() {
-      def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 0)
-      def failures = assertValidPairings(rankedPlayers)
-      println "Number of Failures = " + failures
+      assert failures == 0
    }
 
    @Test
    void test4PlayerTournamentMultipleTimes() {
       def failures = 0
       for(i in 0..30){
-         def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 0)
-         failures += assertValidPairings(rankedPlayers)
-
-         rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 1)
+         def rankedPlayers = runTournament(4, 3, 3, "Swiss", 2, 1)
          failures += assertValidPairings(rankedPlayers)
       }
-      println "Number of Failures = " + failures
+      assert failures == 0
    }
 
    @Test
    void test5PlayerTournament2Wins1Losses() {
       def rankedPlayers = runTournament(5, 3, 3, "Swiss", 2, 1)
       def failures = assertValidPairings(rankedPlayers)
-      println "Number of Failures = " + failures
+      assert failures == 0
    }
 
    @Test
-   void test5PlayerTournament2Wins0Losses() {
-      def rankedPlayers = runTournament(5, 3, 3, "Swiss", 2, 0)
-      def failures = assertValidPairings(rankedPlayers)
-      println "Number of Failures = " + failures
+   void test5PlayerTournamentMultipleTimes() {
+      def failures = 0
+      for(i in 0..30){
+         def rankedPlayers = runTournament(5, 3, 3, "Swiss", 2, 1)
+         failures += assertValidPairings(rankedPlayers)
+      }
+      assert failures == 0
    }
 
-   private runTournament(int numPlayers, int maxRound, int bestOf, String format, int wins, int losses) {
+   @Test
+   void test6PlayerTournament2Wins1Losses() {
+      def rankedPlayers = runTournament(6, 3, 3, "Swiss", 2, 1)
+      def failures = assertValidPairings(rankedPlayers)
+      assert failures == 0
+   }
+
+   @Test
+   void test6PlayerTournamentMultipleTimes() {
+      def failures = 0
+      for(i in 0..30){
+         def rankedPlayers = runTournament(6, 3, 3, "Swiss", 2, 1)
+         failures += assertValidPairings(rankedPlayers)
+      }
+      assert failures == 0
+   }
+
+   @Test
+   void test7PlayerTournament2Wins1Losses() {
+      def rankedPlayers = runTournament(7, 3, 3, "Swiss", 2, 1)
+      def failures = assertValidPairings(rankedPlayers)
+      assert failures == 0
+   }
+
+   @Test
+   void test7PlayerTournamentMultipleTimes() {
+      def failures = 0
+      for(i in 0..30){
+         def rankedPlayers = runTournament(7, 3, 3, "Swiss", 2, 1)
+         failures += assertValidPairings(rankedPlayers)
+      }
+      assert failures == 0
+   }
+
+   @Test
+   void test8PlayerTournament2Wins1Losses() {
+      def rankedPlayers = runTournament(8, 3, 3, "Swiss", 2, 1)
+      def failures = assertValidPairings(rankedPlayers)
+      assert failures == 0
+   }
+
+   @Test
+   void test8PlayerTournamentMultipleTimes() {
+      def failures = 0
+      for(i in 0..30){
+         def rankedPlayers = runTournament(8, 3, 3, "Swiss", 2, 1)
+         failures += assertValidPairings(rankedPlayers)
+      }
+      assert failures == 0
+   }
+
+   private runTournament(int numPlayers, int maxRound, int bestOf, String format, int maxWins, int maxLosses) {
       //create new tournament
       Tournament tournament = new Tournament(numPlayers, maxRound, bestOf, format)
       RoundPairings rp = new RoundPairings(tournament)
+      Random random = new Random()
 
       //reset players
       PlayerPool.dropAllPlayers()
@@ -81,25 +126,25 @@ class IntegrationTests {
 
          //for each player set the outcome
          while(mapOfPlayers.size() != 0){
+            //randomly generate losses based on maximum possible losses (so 0 or 1 for a best of 3 setup)
+            def losses = random.nextInt(maxLosses+1)
             //find the player and set outcome
             def player = mapOfPlayers.get(mapOfPlayers.firstKey())
-            PlayerPool.setPlayerOutcome(player.name, player.opponent, wins, losses)
+            PlayerPool.setPlayerOutcome(player.name, player.opponent, maxWins, losses)
 
             //if player does not have a bye set the opponent's outcome as well
             if(player.opponent != "Bye"){
                def opponent = mapOfPlayers.get(player.opponent)
-               PlayerPool.setPlayerOutcome(opponent.name, opponent.opponent, losses, wins)
+               PlayerPool.setPlayerOutcome(opponent.name, opponent.opponent, losses, maxWins)
                mapOfPlayers.remove(opponent.name)
             }
 
             //remove player from the list
             mapOfPlayers.remove(player.name)
          }
-         rp.showCurrentRankings()
          //increment tournament
          tournament.nextRound()
       }
-
       return rp.showCurrentRankings()
    }
 

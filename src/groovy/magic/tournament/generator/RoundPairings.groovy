@@ -62,8 +62,8 @@ class RoundPairings {
       listOfPlayers.each { player ->
          player.setRank(rank++)
       }
-      //TODO For debugging only
-//      printRankings(listOfPlayers)
+      //TODO for debugging only
+//      printRankings()
       return listOfPlayers
    }
 
@@ -72,7 +72,8 @@ class RoundPairings {
     * @param rankedPlayers a list of current rank of players
     *
     */
-   private printRankings(ArrayList<PlayerInfo> rankedPlayers) {
+   private printRankings() {
+      def rankedPlayers = sortByCurrentRanking()
       rankedPlayers.each { player ->
          println player.rank + ") " + player.name
          println "\tTotal Points: " + player.points
@@ -100,15 +101,13 @@ class RoundPairings {
       //create a queue object
       queue = new ArrayList<TempPair>()
       //if first round get other sorting
-      if(tourn.round == 1)
-      {
+      if (tourn.round == 1) {
          sorted = (ArrayList<PlayerInfo>) sortByInitialSeed().clone()
       } else {
          sorted = (ArrayList<PlayerInfo>) sortByCurrentRanking().clone()
       }
       //try doing all the pairings
-      def firstIndex = 1
-      trySettingRoundPairings(sorted, firstIndex)
+      trySettingRoundPairings(sorted)
       //after all that activate the pairings in the final queue
       queue.each { pair ->
          pair.activate()
@@ -116,24 +115,47 @@ class RoundPairings {
    }
 
    /**
-    * takes a sorted list and while it has players, pairs them
+    * takes a sorted list tries to pair all the players together
     * @param sorted takes a list of PlayerInfo objects sorted by rank (sometimes in reverse order)
     */
-   def trySettingRoundPairings(ArrayList<PlayerInfo> sorted, int firstIndex) {
-      //try setting the bye first to last player without a bye
-      if(sorted.size()%2 ==1)
-      {
-         def lastIndex = sorted.size()-1
-         trySettingLowestBye(sorted, lastIndex)
-      }
-
-      def index = 1
+   def trySettingRoundPairings(ArrayList<PlayerInfo> sorted) {
+      def firstIndex = 1
       def isFirstPlayer = true
       //try and pair off all the other people
-      while (!sorted.isEmpty()) {
-         def player = sorted.get(0)
-         tryPairingNextPlayer(sorted, player, index, isFirstPlayer, firstIndex)
-         isFirstPlayer = false
+      tryPairingAllPlayers(sorted, isFirstPlayer, firstIndex)
+   }
+
+   /**
+    * tries to pair each player and if it ends up failing will redo this whole process and will try pairing the top player with second in line, and so forth
+    * @param sorted takes a list of PlayerInfo objects sorted by rank
+    * @param isFirstPlayer a boolean that is true says to start trying to pair the first player with the player at index 'firstIndex'
+    * @param firstIndex the index of the player to start trying to pair with
+    */
+   def tryPairingAllPlayers(ArrayList<PlayerInfo> sorted, boolean isFirstPlayer, int firstIndex) {
+      //try setting the bye first to last player without a bye
+      if (sorted.size() % 2 == 1) {
+         def lastIndex = sorted.size() - 1
+         trySettingLowestBye(sorted, lastIndex)
+      }
+      //has this successfully paired the first player?
+      def successFullyPairedAll = true
+      while((sorted.size() != 0) && successFullyPairedAll){
+         def pairIndex = 1
+         //if this is the first player being sorted for the first time may change the index of the player to look at first
+         if(isFirstPlayer)
+         {
+            pairIndex = firstIndex
+            isFirstPlayer = false
+         }
+         //pair first player starting from opponent at pairIndex
+         successFullyPairedAll = tryPairingNextPlayer(sorted, pairIndex)
+      }
+      //this would mean that the player cannot be paired with anyone in the set
+      if (!successFullyPairedAll) {
+         queue.clear()
+         isFirstPlayer = true
+         sorted = (ArrayList<PlayerInfo>) sortByCurrentRanking().clone()
+         tryPairingAllPlayers(sorted, isFirstPlayer, ++firstIndex)
       }
    }
 
@@ -142,11 +164,9 @@ class RoundPairings {
     * @param sorted list of players sorted by rank
     * @param last index of the last player
     */
-   def trySettingLowestBye(ArrayList<PlayerInfo> sorted, int last)
-   {
+   def trySettingLowestBye(ArrayList<PlayerInfo> sorted, int last) {
       def player = sorted.get(last)
-      if(player.canUseBye())
-      {
+      if (player.canUseBye()) {
          queue.add(new TempPair(tourn.round, player.name, "Bye"))
          sorted.remove(last)
       }
@@ -156,45 +176,40 @@ class RoundPairings {
    }
 
    /**
-    * takes in a list, a player, and the next player to look at and tries to pair them
-    * @param sorted takes a list of PlayerInfo objects sorted by rank (sometimes in reverse order)
-    * @param player takes the player object you want to pair someone with
-    * @param index the number of the next player to look at in the list
+    * this is a recursive method that pairs a player with one of the players left in the list
+    * @param sorted a list of players by current rank available to be paired with
+    * @param pairIndex the index of the player to try and pair first
+    * @return a boolean on whether this pairing was successful of not
     */
-   def tryPairingNextPlayer(ArrayList<PlayerInfo> sorted, PlayerInfo player, int index, boolean isFirstPlayer, int firstIndex) {
-      //first opponent to potentially look at
-      if (isFirstPlayer){
-         index = firstIndex
-      }
-      if (index < sorted.size()) {
-         def opponent = sorted.get(index)
+   def boolean tryPairingNextPlayer(ArrayList<PlayerInfo> sorted, int pairIndex) {
+      if (pairIndex < sorted.size()) {
+         //get the first player to look at
+         def player = sorted.get(0)
+         //if there are potential players to match
+         def opponent = sorted.get(pairIndex)
          def opponentName = opponent.name
          //if player has not previously played this opponent
          if (player.canPlayThisPlayer(opponentName)) {
             //add this pair to the queue, as later this may get scrapped
             queue.add(new TempPair(tourn.round, player.name, opponentName))
             //remove the player and opponent paired from sorted and reverts back to trySettingRoundPairs() with two players removed
-            sorted.remove(index)
+            sorted.remove(pairIndex)
             sorted.remove(0)
+            return true
          }
          //else test the next player in sorted and see if thats a better match
          else {
-            tryPairingNextPlayer(sorted, player, ++index, false, firstIndex)
+            return tryPairingNextPlayer(sorted, ++pairIndex)
          }
       }
-      //this would mean that the player cannot be paired with anyone in the set
       else {
-         //clear the queue
-         queue.clear()
-         sorted = (ArrayList<PlayerInfo>) sortByCurrentRanking().clone()
-         trySettingRoundPairings(sorted, ++firstIndex)
-         System.exit(0)
+         return false
       }
    }
 
-   /**
-    * Private inner class to hold the temporary round pairings that may or may not be activated
-    */
+/**
+ * Private inner class to hold the temporary round pairings that may or may not be activated
+ */
    private class TempPair {
 
       private int round
