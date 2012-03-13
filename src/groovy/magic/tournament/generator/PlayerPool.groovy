@@ -47,7 +47,7 @@ class PlayerPool {
      * @param wins the player's wins
      * @param losses the player's losses
      */
-    static void setPlayerOutcome(String playerName, String opponentName, int wins, int losses) {
+    static void setPlayerOutcome(String playerName, String opponentName, int round, int wins, int losses) {
         def player = mapOfPlayers.get(playerName)
         if (player) {
             if (opponentName != "Bye") {
@@ -59,6 +59,7 @@ class PlayerPool {
                 }
                 player.addIndividualWins(wins)
                 player.addIndividualLosses(losses)
+                player.setRoundOutcome(round, wins, losses)
             }
             else {
                 player.byeRound()

@@ -130,12 +130,12 @@ class IntegrationTests {
             def losses = random.nextInt(maxLosses+1)
             //find the player and set outcome
             def player = mapOfPlayers.get(mapOfPlayers.firstKey())
-            PlayerPool.setPlayerOutcome(player.name, player.opponent, maxWins, losses)
+            PlayerPool.setPlayerOutcome(player.name, player.opponent, tournament.round, maxWins, losses)
 
             //if player does not have a bye set the opponent's outcome as well
             if(player.opponent != "Bye"){
                def opponent = mapOfPlayers.get(player.opponent)
-               PlayerPool.setPlayerOutcome(opponent.name, opponent.opponent, losses, maxWins)
+               PlayerPool.setPlayerOutcome(opponent.name, opponent.opponent, tournament.round, losses, maxWins)
                mapOfPlayers.remove(opponent.name)
             }
 

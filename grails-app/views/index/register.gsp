@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: phillip
-  Date: 2/29/12
-  Time: 10:50 AM
-  To change this template use File | Settings | File Templates.
---%>
-
 <html>
 <body>
 <div class="main">
@@ -15,10 +7,10 @@
                 <thead>
                 <tr>
                     <th>
-                        Name
+                        Player Name
                     </th>
                     <th>
-                        Seed
+                        Player Seed
                     </th>
                 </tr>
                 </thead>

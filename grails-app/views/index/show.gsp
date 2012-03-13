@@ -1,15 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Phill
-  Date: 2/27/12
-  Time: 5:16 PM
-  To change this template use File | Settings | File Templates.
---%>
-
-
 <html>
 <body>
-
 <div class="main">
     <g:form>
         <div class="show">

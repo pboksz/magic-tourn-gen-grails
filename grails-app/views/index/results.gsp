@@ -1,26 +1,14 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: phillip
-  Date: 2/28/12
-  Time: 4:55 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <html>
 <body>
-
 <div class="main">
     <g:form>
         <div class="results">
             <table>
                 <thead>
                 <tr>
-                    <th colspan="2">
+                    <th colspan="3">
                         Player Information
                     </th>
-                    %{--<th>--}%
-                    %{--Points--}%
-                    %{--</th>--}%
                     <th colspan="3">
                         Round Stats
                     </th>
@@ -32,8 +20,11 @@
                     <th class="value">
                         Rank
                     </th>
-                    <th>
+                    <th class="names">
                         Name
+                    </th>
+                    <th class="names">
+                        Opponents
                     </th>
                     <th class="value">
                         Wins
@@ -57,12 +48,17 @@
                         <td class="value">
                             ${result.rank}
                         </td>
-                        <td>
+                        <td class="names">
                             ${result.name}
                         </td>
-                        %{--<td>--}%
-                        %{--${result.points}--}%
-                        %{--</td>--}%
+                        <td class="opponents">
+                           <div class="title">View Opponents</div>
+                           <div class="list" style="position:relative; visibility: visible; z-index: 2;">
+                              <g:each in="${result.roundPairings}" var="pair">
+                                 ${pair.key + ") " + pair.value}<br>
+                              </g:each>
+                           </div>
+                        </td>
                         <td class="value">
                             ${result.roundWins}
                         </td>

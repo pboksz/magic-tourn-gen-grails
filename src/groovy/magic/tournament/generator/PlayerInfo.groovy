@@ -125,6 +125,14 @@ class PlayerInfo {
         this.opponent = opponent
     }
 
+    def void setRoundOutcome(int round, int wins, int losses){
+       def info = roundPairings.get(round)
+       def outcome = wins > losses ? "Win" : "Loss"
+       info = info + " / " + outcome + " / " + wins + "-" + losses
+       roundPairings.remove(round)
+       roundPairings.put(round, info)
+    }
+
     def void removeRoundPairing(int round) {
         roundPairings.remove(round)
     }

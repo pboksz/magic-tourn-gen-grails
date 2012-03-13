@@ -1,11 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Phill
-  Date: 2/27/12
-  Time: 3:32 PM
-  To change this template use File | Settings | File Templates.
---%>
 <html>
+<body>
 <div class="main">
     <g:form>
         <div class="players">
