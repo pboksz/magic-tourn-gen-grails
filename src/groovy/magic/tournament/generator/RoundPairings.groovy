@@ -9,7 +9,7 @@ package magic.tournament.generator
 class RoundPairings {
 
    Tournament tourn
-   ArrayList<TempPair> queue
+   ArrayList queue
 
    public RoundPairings(Tournament tourn) {
       this.tourn = tourn
@@ -63,7 +63,7 @@ class RoundPairings {
          player.setRank(rank++)
       }
       //TODO for debugging only
-//      printRankings()
+      printRankings()
       return listOfPlayers
    }
 
@@ -99,7 +99,7 @@ class RoundPairings {
       //list of sorted players
       def sorted
       //create a queue object
-      queue = new ArrayList<TempPair>()
+      queue = new ArrayList<>()
       //if first round get other sorting
       if (tourn.round == 1) {
          sorted = (ArrayList<PlayerInfo>) sortByInitialSeed().clone()
@@ -110,7 +110,7 @@ class RoundPairings {
       trySettingRoundPairings(sorted)
       //after all that activate the pairings in the final queue
       queue.each { pair ->
-         pair.activate()
+         PlayerPool.setRoundPairing(pair.round, pair.player, pair.opponent)
       }
    }
 
@@ -167,7 +167,7 @@ class RoundPairings {
    def trySettingLowestBye(ArrayList<PlayerInfo> sorted, int last) {
       def player = sorted.get(last)
       if (player.canUseBye()) {
-         queue.add(new TempPair(tourn.round, player.name, "Bye"))
+         queue.add([round: tourn.round, player: player.name,opponent: "Bye"])
          sorted.remove(last)
       }
       else {
@@ -187,11 +187,10 @@ class RoundPairings {
          def player = sorted.get(0)
          //if there are potential players to match
          def opponent = sorted.get(pairIndex)
-         def opponentName = opponent.name
          //if player has not previously played this opponent
-         if (player.canPlayThisPlayer(opponentName)) {
+         if (player.canPlayThisPlayer(opponent.name)) {
             //add this pair to the queue, as later this may get scrapped
-            queue.add(new TempPair(tourn.round, player.name, opponentName))
+            queue.add([round: tourn.round, player: player.name,opponent: opponent.name])
             //remove the player and opponent paired from sorted and reverts back to trySettingRoundPairs() with two players removed
             sorted.remove(pairIndex)
             sorted.remove(0)
@@ -204,26 +203,6 @@ class RoundPairings {
       }
       else {
          return false
-      }
-   }
-
-/**
- * Private inner class to hold the temporary round pairings that may or may not be activated
- */
-   private class TempPair {
-
-      private int round
-      private String player
-      private String opponent
-
-      public TempPair(int round, String player, String opponent) {
-         this.round = round
-         this.player = player
-         this.opponent = opponent
-      }
-
-      def activate() {
-         PlayerPool.setRoundPairing(round, player, opponent)
       }
    }
 }

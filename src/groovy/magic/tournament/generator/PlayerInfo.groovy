@@ -105,6 +105,21 @@ class PlayerInfo {
        }
     }
 
+   def void removePossibleOpponent(String opponent) {
+      //if the removed opponent is on the list of possible opponents, remove it
+      def index = possibleOpponents.indexOf(opponent)
+      if(index != -1){
+         possibleOpponents.remove(index)
+      }
+   }
+
+   def void addPossibleOpponent(String opponent) {
+      //if the player has not had a bye yet, and the opponent is not already on the list of possible opponents, add it
+      if((!roundPairings.containsValue(opponent)) && (!possibleOpponents.contains(opponent))){
+         possibleOpponents.add(opponent)
+      }
+   }
+
     def boolean canPlayThisPlayer(String opponentName) {
        def canPlay = false
        possibleOpponents.each { opponent ->
@@ -113,11 +128,6 @@ class PlayerInfo {
           }
        }
        return canPlay
-    }
-   
-    def void removePossibleOpponent(String opponent) {
-        def index = possibleOpponents.indexOf(opponent)
-        possibleOpponents.remove(index)
     }
 
     def void addRoundPairing(int round, String opponent) {

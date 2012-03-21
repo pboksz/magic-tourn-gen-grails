@@ -52,7 +52,7 @@ class IndexController {
                playerNames.add(name)
             }
          }
-         tournament.registerPlayers(playerNames)
+         PlayerPool.registerPlayers(playerNames)
 
          //pass the round number and pairings list
          def listOfPlayers = PlayerPool.listOfPlayers.sort { p1, p2 ->
@@ -168,10 +168,13 @@ class IndexController {
    }
 
    //TODO implement drop player
-//        def dropplayer() {
-//            PlayerPool.dropPlayer(params.dropped, params.getsbye)
-//            redirect(action: "show")
-//        }
+   //Only if there are more players than rounds left and not round 1
+   def dropplayer() {
+      if(!PlayerPool.dropPlayer(tournament.round, params.dropped, params.getsbye)) {
+         flash.error = params.dropped + " cannot be dropped because there would not be enough players left to adequately pair everyone in the remaining rounds."
+      }
+      redirect(action: "show")
+   }
 
    def newtournament() {
       PlayerPool.dropAllPlayers()

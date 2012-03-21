@@ -65,7 +65,8 @@ environments {
    }
    production {
       grails.logging.jul.usebridge = false
-      grails.serverURL = "http://pboksz.s156.eatj.com/mtg"
+      //TODO change me
+      //grails.serverURL = "http://www.magicgen.com"
    }
 }
 

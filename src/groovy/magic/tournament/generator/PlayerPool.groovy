@@ -9,35 +9,54 @@ package magic.tournament.generator
 class PlayerPool {
     private static SortedMap<String, PlayerInfo> mapOfPlayers = new TreeMap<String, PlayerInfo>()
     private static Random seed = new Random()
+    private static int maxDroppable = 1
 
     static SortedMap<String, PlayerInfo> getMapOfPlayers() {
         return mapOfPlayers
     }
 
-    static void addNewPlayer(ArrayList<String> playerNames, String name) {
-        mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100), playerNames))
+   static ArrayList<PlayerInfo> getListOfPlayers() {
+      ArrayList<PlayerInfo> listOfPlayers = new ArrayList<PlayerInfo>()
+      mapOfPlayers.each { infoEntry ->
+         listOfPlayers.add(infoEntry.value)
+      }
+      return listOfPlayers
+   }
+
+    static int getNumPlayers() {
+       return mapOfPlayers.size()
     }
 
-    //TODO drop player from each possible opponentName list
-    //This is postponed for now
-    static void dropPlayer(int round, String dropped, String getsBye) {
-        mapOfPlayers.remove(dropped)
-        def player = mapOfPlayers.get(getsBye)
-        player.byeRound()
-        player.removeRoundPairing(round)
-        save(player)
+    static void registerPlayers(ArrayList<String> playerNames) {
+       playerNames.each { name ->
+          mapOfPlayers.put(name, new PlayerInfo(name, seed.nextInt(100), playerNames))
+       }
+       maxDroppable = numPlayers-3
+    }
+
+    static boolean dropPlayer(int round, String dropped, String getsBye) {
+       if((round > 1) && (maxDroppable > 0)){
+         mapOfPlayers.remove(dropped)
+          maxDroppable--
+
+          //for each player remove dropped player and add "Bye" to list of possible opponents
+          def listOfPlayers = getListOfPlayers()
+          def size = listOfPlayers.size()-1
+          for(i in 0..size){
+             def player = listOfPlayers.get(i)
+             player.removePossibleOpponent(dropped)
+             player.addPossibleOpponent("Bye")
+             save(player)
+          }
+          return true
+       }
+       else {
+          return false
+       }
     }
 
     static void dropAllPlayers() {
         mapOfPlayers.clear()
-    }
-
-    static ArrayList<PlayerInfo> getListOfPlayers() {
-        ArrayList<PlayerInfo> listOfPlayers = new ArrayList<PlayerInfo>()
-        mapOfPlayers.each { infoEntry ->
-            listOfPlayers.add(infoEntry.value)
-        }
-        return listOfPlayers
     }
 
     /**
@@ -96,8 +115,7 @@ class PlayerPool {
      * @param player the PlayerInfo object for that player
      */
     private static void save(PlayerInfo player) {
-        def name = player.name
-        mapOfPlayers.remove(name)
-        mapOfPlayers.put(name, player)
+        mapOfPlayers.remove(player.name)
+        mapOfPlayers.put(player.name, player)
     }
 }

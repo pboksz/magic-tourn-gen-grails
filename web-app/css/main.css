@@ -624,6 +624,7 @@ a.skip {
    width: 26%;
 }
 
+/* css for opponents showing up on mouseover */
 .results .opponents .list {
    display: none;
 }
@@ -641,3 +642,22 @@ a.skip {
 .results .opponents:hover .title {
    display: none;
 }
+
+/* css for drop button showing up on mouseover */
+.show .names .drop {
+   display: none;
+   opacity:0.4;
+   filter:alpha(opacity=40);
+}
+
+.show .names:hover .drop {
+   display: block;
+}
+
+.show .names .drop:hover {
+   opacity:1.0;
+   filter:alpha(opacity=100);
+}
+
+
+

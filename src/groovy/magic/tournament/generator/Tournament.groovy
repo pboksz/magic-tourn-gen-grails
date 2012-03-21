@@ -43,10 +43,4 @@ class Tournament {
     def String getFormat() {
         return format
     }
-
-    def void registerPlayers(ArrayList<String> playerNames) {
-        playerNames.each { name ->
-            PlayerPool.addNewPlayer(playerNames, name)
-        }
-    }
 }

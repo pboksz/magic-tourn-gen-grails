@@ -1,7 +1,7 @@
 package magic.tournament.generator
 
 import grails.test.mixin.TestFor
-import magic.tournament.generator.RoundPairings
+
 /**
  *{NAME}* Author: Phillip Boksz
  * Date: 2/24/12
