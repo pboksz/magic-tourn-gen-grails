@@ -7,42 +7,44 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <head>
 
-   %{--TODO javascript to add possible rounds, display drop option, and other verification features--}%
    <script type="text/javascript">
       function dropCheck(who)
       {
          return confirm("Do you really want to drop " + who + " from the tournament?");
       }
-      %{-- TODO make this work --}%
-      function addRounds()
+
+      function addRounds(numPlayers)
       {
-         var numPlayers = document.getElementById("howManyPlayers").value;
-         var numRounds = document.getElementById("howManyRounds").options;
-         if(numPlayers > 8) {
-            numRounds.add(4);
+         if((numPlayers >= 4) && numPlayers <= 8){
+            clearRounds()
          }
-         if(numPlayers > 16){
-            numRounds.add(5);
+         if((numPlayers > 8) && (numPlayers <= 16)) {
+            clearRounds();
+            addOptions(1);
          }
-         if (numPlayers > 32) {
-            numRounds.add(6);
+         if((numPlayers > 16) && (numPlayers <= 32)){
+            clearRounds();
+            addOptions(2);
          }
-         alert(numRounds)
       }
+
+      function clearRounds() {
+         document.settings.howManyRounds.options.length = 1;
+      }
+
+      function addOptions(num) {
+         for(var i=1; i<(num+1); i++){
+            document.settings.howManyRounds.options[i] = new Option(i+3);
+         }
+      }
+
       %{-- TODO client side value verification --}%
-      function verifyValue()
+      function verifyValue(field, max)
       {
-
-      }
-
-      %{-- TODO show opponents in div --}%
-      function showOpponents()
-      {
-         document.getElementById("opponents").style.visibility = show;
-      }
-      function hideOpponents()
-      {
-         document.getElementById("opponents").style.visibility = hidden;
+         var num = field.value;
+         if((num > max) || (num < 0)){
+             alert("invalid number!");
+         }
       }
    </script>
 

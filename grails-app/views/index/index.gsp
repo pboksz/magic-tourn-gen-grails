@@ -1,7 +1,7 @@
 <html>
 <body>
 <div class="main">
-    <g:form>
+    <g:form name="settings">
         <div class="settings">
             <table>
                 <thead>
@@ -22,16 +22,16 @@
                 </thead>
                 <tr>
                     <td>
-                        <g:select name="howManyPlayers" from="${[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}" onchange="addRounds()"/><br>
+                        <g:select name="howManyPlayers" from="${4..16}" onchange="addRounds(this.value)"/>
                     </td>
                     <td>
-                        <g:select name="howManyRounds" from="${[3]}"/><br>
+                        <g:select name="howManyRounds" from="${[3]}"/>
                     </td>
                     <td>
-                        <g:select name="bestOf" from="${[3, 5]}"/><br>
+                        <g:select name="bestOf" from="${[3, 5]}"/>
                     </td>
                     <td>
-                        <g:select name="whichFormat" from="${["Swiss"]}"/><br>
+                        <g:select name="whichFormat" from="${["Swiss"]}"/>
                     </td>
                 </tr>
             </table>

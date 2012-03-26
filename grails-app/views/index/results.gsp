@@ -50,10 +50,17 @@
                         </td>
                         <td class="names">
                             ${result.name}
+                            <g:if test="${flash.title=="Current Standings"}">
+                                <div class="drop">
+                                    <g:link action="dropplayer" params="[dropped: result.name, getsbye: result.opponent]" onclick="return dropCheck('${result.name}')">
+                                        <g:img dir="images" file="delete.png" alt="Drop Player"/>
+                                    </g:link>
+                                </div>
+                            </g:if>
                         </td>
                         <td class="opponents">
                            <div class="title">View Opponents</div>
-                           <div class="list" style="position:relative; visibility: visible; z-index: 2;">
+                           <div class="list">
                               <g:each in="${result.roundPairings}" var="pair">
                                  ${pair.key + ") " + pair.value}<br>
                               </g:each>

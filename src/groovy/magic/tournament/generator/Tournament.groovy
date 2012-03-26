@@ -7,6 +7,7 @@ package magic.tournament.generator
  * Time: 10:37 AM
  */
 class Tournament {
+    private int prevRound = 0
     private int round = 1
     private int numPlayers
     private int maxRound
@@ -20,27 +21,39 @@ class Tournament {
         this.format = format
     }
 
-    def int getRound() {
+    def getPrevRound() {
+        return prevRound
+    }
+
+    def getRound() {
         return round
     }
 
-    def void nextRound() {
-        this.round += 1
+    def nextRound() {
+        this.round++
     }
 
-    def int getNumPlayers() {
+    def incPrevRound() {
+        this.prevRound++
+    }
+
+    def getNumPlayers() {
         return numPlayers
     }
 
-    def int getMaxRound() {
+    def getMaxRound() {
         return maxRound
     }
 
-    def int getBestOf() {
+    def getBestOf() {
         return bestOf
     }
 
-    def String getFormat() {
+    def getFormat() {
         return format
+    }
+
+    def isNextRound() {
+        return round > prevRound
     }
 }

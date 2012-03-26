@@ -620,41 +620,54 @@ a.skip {
     width: 8%
 }
 
-.results .names .opponents {
+.results .names {
+   width: 26%;
+}
+
+.results .opponents {
    width: 26%;
 }
 
 /* css for opponents showing up on mouseover */
-.results .opponents .list {
-   display: none;
+.results .opponents {
+   position: relative;
 }
 
-.results .opponents .title {
-   font-weight: bold;
-   text-decoration: underline;
-   display: block;
+.results .opponents .list {
+   display: none;
 }
 
 .results .opponents:hover .list {
    display: block;
 }
 
+.results .opponents .title {
+    display: block;
+}
+
 .results .opponents:hover .title {
-   display: none;
+    display: none;
 }
 
 /* css for drop button showing up on mouseover */
-.show .names .drop {
-   display: none;
-   opacity:0.4;
-   filter:alpha(opacity=40);
+.results .names {
+   position: relative;
 }
 
-.show .names:hover .drop {
+.results .names .drop {
+   position: absolute;
+   top: 10px;
+   right: 10px;
+   display: none;
+   opacity: 0.4;
+   filter: alpha(opacity=40);
+}
+
+.results .names:hover .drop {
    display: block;
 }
 
-.show .names .drop:hover {
+.results .names .drop:hover {
    opacity:1.0;
    filter:alpha(opacity=100);
 }

@@ -67,7 +67,10 @@ class IndexController {
    }
 
    def show() {
-      roundPairings.setRoundPairings()
+      if(tournament.isNextRound()){
+          roundPairings.setRoundPairings()
+          tournament.incPrevRound()
+      }
       flash.title = "Round " + tournament.getRound()
       flash.message = "Please enter the wins of each player and opponent."
       def listOfPairs = new ArrayList<PlayerInfo>()
@@ -78,7 +81,8 @@ class IndexController {
          mapOfPlayers.remove(player.name)
          mapOfPlayers.remove(player.opponent)
       }
-      render(view: "show", model: [listOfPairs: listOfPairs])
+      def max = (int) Math.ceil(tournament.bestOf/2)
+      render(view: "show", model: [listOfPairs: listOfPairs, max: max])
    }
 
    def nextround() {
@@ -171,7 +175,7 @@ class IndexController {
       if(!PlayerPool.dropPlayer(tournament.round, params.dropped, params.getsbye)) {
          flash.error = params.dropped + " cannot be dropped because there would not be enough players left to adequately pair everyone in the remaining rounds."
       }
-      redirect(action: "show")
+      redirect(action: "current")
    }
 
    def newtournament() {
