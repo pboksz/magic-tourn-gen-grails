@@ -167,8 +167,6 @@ class IndexController {
       render(view: "results", model: [results: results])
    }
 
-   //TODO implement drop player
-   //Only if there are more players than rounds left and not round 1
    def dropplayer() {
       if(!PlayerPool.dropPlayer(tournament.round, params.dropped, params.getsbye)) {
          flash.error = params.dropped + " cannot be dropped because there would not be enough players left to adequately pair everyone in the remaining rounds."
