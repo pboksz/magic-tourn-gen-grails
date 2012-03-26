@@ -100,19 +100,37 @@ class IntegrationTests {
       assert failures == 0
    }
 
-//   @Test
-//   void testDroppingSinglePlayerBeforeRound2() {
-//      for(i in 0..0){
-//         runTournament(4, 3, 3, 3, 2, true, 2)
-//      }
-//   }
-//
-//   @Test
-//   void testDroppingSinglePlayerBeforeRound3() {
-//      for(i in 0..30){
-//         runTournament(4, 3, 3, 3, 2, true, 3)
-//      }
-//   }
+   @Test
+   void testDroppingSinglePlayerBeforeRound2() {
+      for(i in 0..30){
+         //4 players
+         runTournament(4, 3, 3, 3, 2, true, 2)
+         //5 players
+         runTournament(5, 3, 3, 3, 2, true, 2)
+         //6 players
+         runTournament(6, 3, 3, 3, 2, true, 2)
+         //7 players
+         runTournament(7, 3, 3, 3, 2, true, 2)
+         //8 players
+         runTournament(8, 3, 3, 3, 2, true, 2)
+      }
+   }
+
+   @Test
+   void testDroppingSinglePlayerBeforeRound3() {
+      for(i in 0..30){
+         //4 players
+         runTournament(4, 3, 3, 3, 2, true, 3)
+         //5 players
+         runTournament(5, 3, 3, 3, 2, true, 3)
+         //6 players
+         runTournament(6, 3, 3, 3, 2, true, 3)
+         //7 players
+         runTournament(7, 3, 3, 3, 2, true, 3)
+         //8 players
+         runTournament(8, 3, 3, 3, 2, true, 3)
+      }
+   }
 
    private runTournament(int numPlayers, int maxRound, int bestOf, int maxWins, int maxLosses, boolean dropTest=false, int dropRound=2, String format="Swiss") {
       //create new tournament

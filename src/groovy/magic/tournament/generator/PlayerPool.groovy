@@ -36,7 +36,7 @@ class PlayerPool {
 
     static boolean dropPlayer(int round, String dropped, String getsBye) {
        if((round > 1) && (maxDroppable > 0)){
-         mapOfPlayers.remove(dropped)
+          mapOfPlayers.remove(dropped)
           maxDroppable--
 
           //for each player remove dropped player and add "Bye" to list of possible opponents
@@ -45,7 +45,6 @@ class PlayerPool {
           for(i in 0..size){
              def player = listOfPlayers.get(i)
              player.removePossibleOpponent(dropped)
-             player.addPossibleOpponent("Bye")
              save(player)
           }
           return true

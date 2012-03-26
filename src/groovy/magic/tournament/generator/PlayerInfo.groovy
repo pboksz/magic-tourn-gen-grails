@@ -113,13 +113,6 @@ class PlayerInfo {
       }
    }
 
-   def void addPossibleOpponent(String opponent) {
-      //if the player has not had a bye yet, and the opponent is not already on the list of possible opponents, add it
-      if((!roundPairings.containsValue(opponent)) && (!possibleOpponents.contains(opponent))){
-         possibleOpponents.add(opponent)
-      }
-   }
-
     def boolean canPlayThisPlayer(String opponentName) {
        def canPlay = false
        possibleOpponents.each { opponent ->
@@ -154,4 +147,8 @@ class PlayerInfo {
     def boolean canUseBye() {
        return possibleOpponents.contains("Bye")
     }
+
+   def boolean canOnlyGetBye() {
+      return (canUseBye() && (possibleOpponents.size()==1))
+   }
 }
