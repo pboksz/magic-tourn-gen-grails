@@ -1,7 +1,7 @@
 <html>
 <body>
 <div class="main">
-    <g:form name="info">
+    <g:form>
         <div class="show">
             <table>
                 <thead>
@@ -24,7 +24,7 @@
                 </tr>
                 </thead>
                 <g:each in="${listOfPairs}" var="pair">
-                     <tr class="info">
+                     <tr>
                          <td>
                              ${pair.name}
                              <g:hiddenField name="player" value="${pair.name}"/>
