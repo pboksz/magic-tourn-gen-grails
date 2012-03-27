@@ -8,6 +8,7 @@
 <head>
 
    <script type="text/javascript">
+
       function dropCheck(who)
       {
          return confirm("Do you really want to drop " + who + " from the tournament?");
@@ -38,12 +39,20 @@
          }
       }
 
-      %{-- TODO client side value verification --}%
-      function verifyValue(field, max)
-      {
+      //TODO still testing this, but coloring works individually
+      function verifyValue(field, maxNum) {
          var num = field.value;
-         if((num > max) || (num < 0)){
-             alert("invalid number!");
+         //if there is an error do a red outline
+         if((num > maxNum) || (num < 0)) {
+            field.style.borderColor = "#ff8888";
+            field.style.mozBoxShadow = "0 0 0.25em #ff8888";
+            field.style.boxShadow = "0 0 0.25em #ff8888";
+         }
+         //else do a blue outline
+         else {
+            field.style.borderColor = "#b2d1ff";
+            field.style.mozBoxShadow = "0 0 0.25em #b2d1ff";
+            field.style.boxShadow = "0 0 0.25em #b2d1ff";
          }
       }
    </script>

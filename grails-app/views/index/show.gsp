@@ -1,5 +1,5 @@
 <html>
-<body>
+<body onload="setMax(${max})">
 <div class="main">
     <g:form name="info">
         <div class="show">
@@ -46,7 +46,7 @@
                          </td>
                          <td>
                              <g:if test="${pair.opponent != 'Bye'}">
-                                 <g:textField name="losses" maxlength="1" style="width: 20px" onchange="verifyValue(this.value)"/>
+                                 <g:textField name="losses" maxlength="1" style="width: 20px" onchange="verifyValue(this, ${max})"/>
                              </g:if>
                              <g:else>
                                  <g:hiddenField name="losses" value="-1"/>
