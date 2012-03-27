@@ -41,14 +41,42 @@
 
       //TODO still testing this, but coloring works individually
       function verifyValue(field, maxNum) {
+         var hasError = true;
          var num = field.value;
+
+         var opponent;
+         if(this == "wins") {
+            opponent = field.parent.parent.cells[4];
+         }
+         if(this == "losses") {
+            opponent = field.parent.parent.cells[1];
+         }
+         if(opponent == "undefined"){
+            opponent = 0;
+         }
+
+         //these are the only times it has no error
+         if((num == maxNum) && (opponent < maxNum) && (opponent >= 0)) {
+            hasError = false;
+         }
+         if((opponent == maxNum) && (num < maxNum) && (num >= 0)) {
+            hasError = false;
+         }
+
+//         if((num > maxNum) || (num < 0)) {
+//            hasError = true;
+//         }
+//         else {
+//            hasError = false;
+//         }
+
          //if there is an error do a red outline
-         if((num > maxNum) || (num < 0)) {
+         if(hasError){
             field.style.borderColor = "#ff8888";
             field.style.mozBoxShadow = "0 0 0.25em #ff8888";
             field.style.boxShadow = "0 0 0.25em #ff8888";
          }
-         //else do a blue outline
+         //else do a blue one
          else {
             field.style.borderColor = "#b2d1ff";
             field.style.mozBoxShadow = "0 0 0.25em #b2d1ff";

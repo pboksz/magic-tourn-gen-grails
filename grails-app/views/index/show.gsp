@@ -1,5 +1,5 @@
 <html>
-<body onload="setMax(${max})">
+<body>
 <div class="main">
     <g:form name="info">
         <div class="show">
@@ -24,14 +24,14 @@
                 </tr>
                 </thead>
                 <g:each in="${listOfPairs}" var="pair">
-                     <tr>
+                     <tr class="info">
                          <td>
                              ${pair.name}
                              <g:hiddenField name="player" value="${pair.name}"/>
                          </td>
                          <td>
                              <g:if test="${pair.opponent != 'Bye'}">
-                                 <g:textField name="wins" maxlength="1" style="width: 20px" onchange="verifyValue(this, ${max})"/>
+                                 <g:textField name="wins" maxlength="1" style="width: 20px" onchange="verifyValue(this, ${maxWin})"/>
                              </g:if>
                              <g:else>
                                  <g:hiddenField name="wins" value="-1"/>
@@ -46,7 +46,7 @@
                          </td>
                          <td>
                              <g:if test="${pair.opponent != 'Bye'}">
-                                 <g:textField name="losses" maxlength="1" style="width: 20px" onchange="verifyValue(this, ${max})"/>
+                                 <g:textField name="losses" maxlength="1" style="width: 20px" onchange="verifyValue(this, ${maxWin})"/>
                              </g:if>
                              <g:else>
                                  <g:hiddenField name="losses" value="-1"/>

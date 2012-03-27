@@ -81,8 +81,9 @@ class IndexController {
          mapOfPlayers.remove(player.name)
          mapOfPlayers.remove(player.opponent)
       }
-      def max = (int) Math.ceil(tournament.bestOf/2)
-      render(view: "show", model: [listOfPairs: listOfPairs, max: max])
+      def maxWin = (int) Math.ceil(tournament.bestOf/2)
+      def bestOf = tournament.bestOf
+      render(view: "show", model: [listOfPairs: listOfPairs, maxWin: maxWin, bestOf: bestOf])
    }
 
    def nextround() {
