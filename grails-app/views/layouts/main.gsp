@@ -53,6 +53,31 @@
             field.style.mozBoxShadow = "0 0 0.25em #b2d1ff";
             field.style.boxShadow = "0 0 0.25em #b2d1ff";
          }
+
+         //TODO write a verify all values method
+         function verifyValues(bestOf, maxWin) {
+            var hasError = false;
+            var wins = document.show.wins;
+            var losses = document.show.losses;
+
+            for(var i=0; i<wins.length; i++){
+               var color;
+               if((wins[i]+losses[i] > bestOf) || (wins[i]+losses[i] < maxWin)){
+                  hasError = true;
+                  color = "#ff8888";
+               }
+               else {
+                  color = "#b2d1ff"
+               }
+               wins[i].style.borderColor = color;
+               wins[i].style.mozBoxShadow = "0 0 0.25em " + color;
+               wins[i].style.boxShadow = "0 0 0.25em " + color;
+               losses[i].style.borderColor = color;
+               losses[i].style.mozBoxShadow = "0 0 0.25em " + color;
+               losses[i].style.boxShadow = "0 0 0.25em " + color;
+            }
+            return false;
+         }
       }
    </script>
 

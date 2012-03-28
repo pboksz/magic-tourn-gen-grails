@@ -1,7 +1,7 @@
 <html>
 <body>
 <div class="main">
-    <g:form>
+    <g:form name="show">
         <div class="show">
             <table>
                 <thead>
@@ -58,7 +58,7 @@
         </div>
 
         <div class="options">
-            <g:actionSubmit value="Submit Round Results" action="nextround"/>
+            <g:actionSubmit value="Submit Round Results" action="nextround" onclick="return verifyValues(${bestOf}, ${maxWin})"/>
         </div>
     </g:form>
 </div>
