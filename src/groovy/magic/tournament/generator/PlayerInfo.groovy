@@ -113,10 +113,10 @@ class PlayerInfo {
       }
    }
 
-    def boolean canPlayThisPlayer(String opponentName) {
+    def boolean canPlayThisPlayer(String playerName) {
        def canPlay = false
        possibleOpponents.each { opponent ->
-          if(opponentName.equals(opponent)){
+          if(playerName.equals(opponent)){
              canPlay = true
           }
        }
@@ -134,10 +134,6 @@ class PlayerInfo {
        info = info + " / " + outcome + " / " + wins + "-" + losses
        roundPairings.remove(round)
        roundPairings.put(round, info)
-    }
-
-    def void removeRoundPairing(int round) {
-        roundPairings.remove(round)
     }
 
     def void setRank(int rank) {

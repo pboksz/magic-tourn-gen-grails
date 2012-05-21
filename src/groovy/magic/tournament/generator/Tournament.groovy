@@ -29,14 +29,6 @@ class Tournament {
         return round
     }
 
-    def nextRound() {
-        this.round++
-    }
-
-    def incPrevRound() {
-        this.prevRound++
-    }
-
     def getNumPlayers() {
         return numPlayers
     }
@@ -51,6 +43,14 @@ class Tournament {
 
     def getFormat() {
         return format
+    }
+
+    def nextRound() {
+       this.round++
+    }
+
+    def incPrevRound() {
+       this.prevRound++
     }
 
     def isNextRound() {

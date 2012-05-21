@@ -56,14 +56,14 @@
 
          //TODO write a verify all values method
          function verifyValues(bestOf, maxWin) {
-            var hasError = false;
+            var hasNoError = true;
             var wins = document.show.wins;
             var losses = document.show.losses;
 
             for(var i=0; i<wins.length; i++){
                var color;
                if((wins[i]+losses[i] > bestOf) || (wins[i]+losses[i] < maxWin)){
-                  hasError = true;
+                  hasNoError = false;
                   color = "#ff8888";
                }
                else {
@@ -76,7 +76,7 @@
                losses[i].style.mozBoxShadow = "0 0 0.25em " + color;
                losses[i].style.boxShadow = "0 0 0.25em " + color;
             }
-            return false;
+            return hasNoError;
          }
       }
    </script>
